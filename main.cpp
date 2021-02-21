@@ -1,65 +1,78 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
+#include <CL/opencl.hpp>
 
-#define WIDTH (300 * 2)
-#define HEIGHT (200 * 2)
+#define WIDTH (300 * 4)
+#define HEIGHT (200 * 4)
 #define N_ITERS 1000
-#define K_COLOR 10.
-#define A_COLOR (1. * (1. / K_COLOR))
-#define B_COLOR (0.2357022604 * (1. / K_COLOR))
-#define C_COLOR (0.58490406881 * (1. / K_COLOR))
+
 
 using set_type = long double;
 
-int iterate(set_type c_r, set_type c_j, unsigned short n_iters) {
-    set_type z_r = 0;
-    set_type z_j = 0;
-    set_type new_r;
-    unsigned short i;
-    for (i = 0; i < n_iters; ++i) {
-        new_r = z_r * z_r - z_j * z_j;
-        z_j = 2 * z_r * z_j;
-        z_r = new_r;
-        z_r += c_r;
-        z_j += c_j;
-        if (z_r * z_r + z_j * z_j >= 4)
-            break;
-    }
-    return i;
-}
 
 void init_pixels(sf::Uint8 *setArray) {
-    for (int i = 0; i < WIDTH * HEIGHT * 4; i += 4)
-        setArray[i + 3] = 255;
-}
-inline void color(unsigned short iters, sf::Uint8 &r, sf::Uint8 &g, sf::Uint8 &b) {
-    r = std::floor(255 * ((1 - std::cos(A_COLOR * iters)) / 2));
-    g = std::floor(255 * ((1 - std::cos(B_COLOR * iters)) / 2));
-    b = std::floor(255 * ((1 - std::cos(C_COLOR * iters)) / 2));
-}
-
-void generate_set(sf::Uint8 *setArray, const set_type divider,
-                  const set_type real_shift, const set_type imag_shift,
-                  const int n_iters) {
-    #pragma omp parallel for num_threads(64)
     for (int i = 0; i < WIDTH * HEIGHT * 4; i += 4) {
-        int j = (i / 4) / WIDTH;
-        int r = (i / 4) % WIDTH;
-        set_type c_r = (((set_type) r / WIDTH - 0.5) * 3) / divider - real_shift;
-        set_type c_j = (((set_type) j / HEIGHT - 0.5) * 2) / divider - imag_shift;
-        int iterations = iterate(c_r, c_j, n_iters);
-        color(iterations, setArray[i], setArray[i + 1], setArray[i + 2]);
+        setArray[i] = 0;
+        setArray[i + 1] = 255;
+        setArray[i + 3] = 255;
     }
 }
 
 int main() {
+    std::vector<cl::Platform> all_platforms;
+    cl::Platform::get(&all_platforms);
+    if(all_platforms.empty()){
+        std::cout<<" No platforms found. Check OpenCL installation!\n";
+        exit(1);
+    }
+    const char *KernelSource =
+            R"("
+        #include "mandelbrot.cl"
+        ")"
+            ;
+
+    const cl_uint num = 1;
+    clGetDeviceIDs(nullptr, CL_DEVICE_TYPE_GPU, 0, nullptr, (cl_uint*)&num);
+
+    cl_device_id devices[1];
+    std::cout << devices[0] << std::endl;
+    clGetDeviceIDs(nullptr, CL_DEVICE_TYPE_GPU, num, devices, nullptr);
+    std::cout << devices[0] << std::endl;
+    // create a compute context with GPU device
+    cl_context context = clCreateContextFromType(nullptr, CL_DEVICE_TYPE_GPU, nullptr, nullptr, nullptr);
+
+    // create a command queue
+    clGetDeviceIDs(nullptr, CL_DEVICE_TYPE_DEFAULT, 1, devices, nullptr);
+    cl_command_queue queue = clCreateCommandQueueWithProperties(context, devices[0], nullptr, nullptr);
+
+    cl_mem memobjs = clCreateBuffer(context,
+                                        CL_MEM_READ_WRITE,
+                                        sizeof(sf::Uint8) * 4 * WIDTH * HEIGHT,
+                                        nullptr,
+                                        nullptr);
+
+	cl_program program = clCreateProgramWithSource(context, 1, (const char **)& KernelSource, nullptr, nullptr);
+
+    clBuildProgram(program, 0, nullptr, nullptr, nullptr, nullptr);
+    cl_kernel kernel = clCreateKernel(program, "mandelbrot", nullptr);
+
+    clSetKernelArg(kernel, 0, sizeof(cl_mem), (void *)&memobjs);
+
+    size_t global_work_size[1] = { WIDTH * HEIGHT * 4 };
+    size_t local_work_size[1] = { 256 };
+
+    auto *pixels = new sf::Uint8[WIDTH * HEIGHT * 4];
+    init_pixels(pixels);
+
+    clEnqueueNDRangeKernel(queue, kernel, 1, nullptr, global_work_size, local_work_size, 0, nullptr, nullptr);
+    clEnqueueReadBuffer(queue, memobjs, CL_TRUE, 0, WIDTH * HEIGHT * sizeof(sf::Uint8) * 4, pixels, 0, nullptr, nullptr);
+
+
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Mandelbrot");
     sf::Texture texture;
     texture.create(WIDTH, HEIGHT);
     bool generate_new = true;
-    auto *pixels = new sf::Uint8[WIDTH * HEIGHT * 4];
-    init_pixels(pixels);
     sf::Sprite sprite(texture);
     unsigned short n_iters = N_ITERS;
     set_type divider = 1.;
@@ -123,7 +136,8 @@ int main() {
         }
         if (generate_new) {
             n_iters = std::max(30, int(std::log(divider) * 40));
-            generate_set(pixels, divider, real_shift, imag_shift, n_iters);
+
+//            generate_set(pixels, divider, real_shift, imag_shift, n_iters);
             generate_new = false;
             std::cout << divider << "  " << n_iters << "  " << std::log(divider) << std::endl;
         }
