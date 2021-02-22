@@ -4,6 +4,18 @@
 Simple app for zooming into the
 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.
 
+
+The set is color by using this equation:
+```math
+(r, g, b) = \frac{255}{2K} * (1 - cos(R * n), 1 - cos(G * n), 1 - cos(B * n))
+```
+where n is the number of iterations and K, R, G, B are chosen parameters,
+initialized as
+```math
+R = 1
+G = \frac{1}{3\sqrt{2}}
+B = \frac{1}{7 \cdot 3^{1/8}}
+```
 ## How to use
 
 <table>
