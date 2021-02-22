@@ -5,17 +5,17 @@ Simple app for zooming into the
 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.
 
 
-The set is color by using this equation:
+The set is color by using this equation:<br>
 <img src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} * (1 - cos(R * n), 1 - cos(G * n), 1 - cos(B * n))">
 
 [comment]: <> (```math)
 [comment]: <> (&#40;r, g, b&#41; = \frac{255}{2K} * &#40;1 - cos&#40;R * n&#41;, 1 - cos&#40;G * n&#41;, 1 - cos&#40;B * n&#41;&#41;)
 [comment]: <> (```)
 where n is the number of iterations and K, R, G, B are chosen parameters,
-initialized as
-<img src="https://render.githubusercontent.com/render/math?math=R = 1">
-<img src="https://render.githubusercontent.com/render/math?math=G = \frac{1}{3\sqrt{2}}">
-<img src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1/8}}">
+initialized as:<br>
+<img src="https://render.githubusercontent.com/render/math?math=R = 1"><br>
+<img src="https://render.githubusercontent.com/render/math?math=G = \frac{1}{3\sqrt{2}}"><br>
+<img src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1/8}}"><br>
 
 [comment]: <> (```math)
 [comment]: <> (R = 1)
