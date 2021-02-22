@@ -69,7 +69,7 @@ public:
 class Visualizer {
 private:
     Mandelbrot set;
-    sf::RenderWindow *window;
+    sf::RenderWindow window;
     sf::Texture texture;
     sf::Sprite sprite;
     sf::Clock clock;
@@ -83,6 +83,5 @@ private:
 
 public:
     Visualizer(int width, int height);
-    ~Visualizer();
     void run();
 };

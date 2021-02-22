@@ -64,9 +64,7 @@ inline void Mandelbrot::fill_color(const unsigned short iters, const unsigned in
 }
 
 void Mandelbrot::generate() {
-#ifndef GPU
-    #pragma omp parallel for num_threads(64)
-#else
+#ifdef GPU
     #pragma acc update device(this->zoom, this->max_iters, \
                               this->real_shift, this->imag_shift, \
                               this->k_constant, this->r_constant, \
@@ -74,30 +72,20 @@ void Mandelbrot::generate() {
 
     #pragma acc data present(pixels[0:len]) copyout(pixels[0:len])
     {
-        #pragma acc parallel loop
+    #pragma acc parallel loop
+#else
+    #pragma omp parallel for num_threads(64)
 #endif
-        for (int i = 0; i < len; i += 4) {
-            int j = (i / 4) / width;
-            int r = (i / 4) % width;
-            set_type c_r = (((set_type) r / width - 0.5) * 3) / zoom - real_shift;
-            set_type c_j = (((set_type) j / height - 0.5) * 2) / zoom - imag_shift;
-            set_type z_r = 0;
-            set_type z_j = 0;
-            set_type new_r;
-            int iterations;
-            for (iterations = 0; iterations < max_iters; ++iterations) {
-                new_r = z_r * z_r - z_j * z_j;
-                z_j = 2 * z_r * z_j;
-                z_r = new_r;
-                z_r += c_r;
-                z_j += c_j;
-                if (z_r * z_r + z_j * z_j >= 4.)
-                    break;
-            }
-            fill_color(iterations, i);
-        }
+    for (int i = 0; i < len; i += 4) {
+        int j = (i / 4) / width;
+        int r = (i / 4) % width;
+        set_type c_r = (((set_type) r / width - 0.5) * 3) / zoom - real_shift;
+        set_type c_j = (((set_type) j / height - 0.5) * 2) / zoom - imag_shift;
+        int iterations = iterate(c_r, c_j);
+        fill_color(iterations, i);
+    }
 #ifdef GPU
-#pragma acc update self(this->pixels[0:this->len])
+    #pragma acc update self(this->pixels[0:this->len])
     }
 #endif
 }
@@ -203,9 +191,9 @@ void Mandelbrot::setBConstant(float bConstant) {
 /*----------------------------------------------*/
 
 Visualizer::Visualizer(int width, int height) :
-        set(Mandelbrot(width, height)) {
-    window = new sf::RenderWindow(sf::VideoMode(width, height), "Mandelbrot");
-    window->setFramerateLimit(60);
+        set(Mandelbrot(width, height)),
+        window(sf::VideoMode(width, height), "Mandelbrot"){
+//    window = new sf::RenderWindow(sf::VideoMode(width, height), "Mandelbrot");
     texture.create(width, height);
     sprite = sf::Sprite(texture);
     assert(font.loadFromFile("arial.ttf"));
@@ -217,10 +205,13 @@ Visualizer::Visualizer(int width, int height) :
 
 void Visualizer::handle_events() {
     sf::Event event{};
-    while (window->pollEvent(event)) {
+    while (window.pollEvent(event)) {
+        int shift = sf::Keyboard::isKeyPressed(
+                sf::Keyboard::LShift
+        ) ? -1 : 1;
         switch (event.type) {
         case sf::Event::Closed:
-            window->close();
+            window.close();
             break;
         case sf::Event::KeyPressed:
             switch (event.key.code) {
@@ -243,10 +234,10 @@ void Visualizer::handle_events() {
                 set.zoom_out();
                 break;
             case sf::Keyboard::R:
-                set.reset(false);
+                set.reset(true);
                 break;
             case sf::Keyboard::B:
-                set.reset(true);
+                set.reset(false);
                 break;
             case sf::Keyboard::H:
                 set.change_iter_shift(-5);
@@ -254,20 +245,17 @@ void Visualizer::handle_events() {
             case sf::Keyboard::L:
                 set.change_iter_shift(5);
                 break;
-            case sf::Keyboard::E:
-                set.setKConstant(set.getKConstant() + 1);
-                break;
-            case sf::Keyboard::Q:
-                set.setKConstant(set.getKConstant() - 1);
+            case sf::Keyboard::U:
+                set.setKConstant(set.getKConstant() + float(shift) * 1);
                 break;
             case sf::Keyboard::I:
-                set.setRConstant(set.getRConstant() + 0.1f);
+                set.setRConstant(set.getRConstant() + float(shift) * 0.1f);
                 break;
             case sf::Keyboard::O:
-                set.setGConstant(set.getGConstant() + 0.1f);
+                set.setGConstant(set.getGConstant() + float(shift) * 0.1f);
                 break;
             case sf::Keyboard::P:
-                set.setBConstant(set.getBConstant() + 0.1f);
+                set.setBConstant(set.getBConstant() + float(shift) * 0.1f);
                 break;
             case sf::Keyboard::Enter:
                 set.save("image" + std::to_string(set.get_zoom()) + ".ppm");
@@ -285,29 +273,24 @@ void Visualizer::handle_events() {
 
 void Visualizer::update_info() {
     float fps = 1.f / clock.getElapsedTime().asSeconds();
-    sprintf(info_string, "%d\n%.3le", std::min(int(fps), 60), set.get_zoom());
+    sprintf(info_string, "%d\n%.3Le", std::min(int(fps), 60), (long double) set.get_zoom());
     info.setString(std::string(info_string));
     clock.restart();
 }
 
 void Visualizer::run() {
-    while (window->isOpen()) {
+    while (window.isOpen()) {
         handle_events();
         if (update) {
             set.adjust_max_iters();
             set.generate();
             update = false;
-//            std::cout << set.getKConstant() << std::endl;
         }
         texture.update(set.get_pixels());
         update_info();
-        window->clear();
-        window->draw(sprite);
-        window->draw(info);
-        window->display();
+        window.clear();
+        window.draw(sprite);
+        window.draw(info);
+        window.display();
     }
-}
-
-Visualizer::~Visualizer() {
-    delete window;
 }
