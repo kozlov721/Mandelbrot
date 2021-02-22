@@ -8,7 +8,7 @@ Simple app for zooming into the
 The set is color by using this equation:
 
 
-<img src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} * (1 - cos(R \cdot n), 1 - cos(G \cdot n), 1 - cos(B \cdot n))">
+<img src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} \cdot (1 - cos(R \cdot n), 1 - cos(G \cdot n), 1 - cos(B \cdot n))">
 
 [comment]: <> (```math)
 [comment]: <> (&#40;r, g, b&#41; = \frac{255}{2K} * &#40;1 - cos&#40;R * n&#41;, 1 - cos&#40;G * n&#41;, 1 - cos&#40;B * n&#41;&#41;)
