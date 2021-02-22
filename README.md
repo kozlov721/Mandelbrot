@@ -5,7 +5,9 @@ Simple app for zooming into the
 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.
 
 
-The set is color by using this equation:<br>
+The set is color by using this equation:
+
+
 <img src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} * (1 - cos(R * n), 1 - cos(G * n), 1 - cos(B * n))">
 
 [comment]: <> (```math)
