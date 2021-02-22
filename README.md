@@ -1,4 +1,4 @@
-# Mandelbrot set zooming app
+# Mandelbrot Set Visualiser 
 
 
 Simple app for zooming into the
@@ -89,8 +89,7 @@ Simple app for zooming into the
     <tr>
         <td>enter</td>
         <td>capture</td>
-        <td>Saves the current part of the set in 8K resolution in
-            .ppm format.
+        <td>Saves the current part of the set as a .ppm image in 8K.
         </td>
     </tr>
 </table>
@@ -101,5 +100,4 @@ for gpu or for cpu. Performance of the gpu version is much higher, but it only a
 use less precise numerical types, so the maximum zoom is lower. <br>
 The performance of cpu version is much worse, but it allows larger zoom.
 
-To build the app, simply use the provided makefile and type:
-`make` or `make ACC=gpu`.
+To build the app, simply use the provided makefile and type `make` or `make ACC=gpu`.
