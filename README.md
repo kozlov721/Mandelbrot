@@ -5,16 +5,15 @@ Simple app for zooming into the
 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.
 Here are some examples:
 
-
+###Zoomed twice.
 <img src="example_images_low_res/twice.png" alt="Zoomed twice"/>
-Zoomed twice.
+###Zoomed a hundred times.
 <img src="example_images_low_res/hundred.png" alt="Zoomed a hundred times"/>
-Zoomed a hundred times.
+###Zoomed a million times.
 <img src="example_images_low_res/million.png" alt="Zoomed a million times"/>
-Zoomed a million times.
+###Zoomed a trillion times.
 <img src="example_images_low_res/trillion.png" alt="Zoomed a trillion times"/>
-Zoomed a trillion times.
-
+<br>
 
 The set is colored using this equation:
 
