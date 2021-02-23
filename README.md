@@ -2,25 +2,23 @@
 
 
 Simple app for zooming into the
-<a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.
-
-
+<a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.<br>
 Here are some examples:
 
 
-**Zoomed twice.** <br>
+**Zoomed twice** <br>
 <img src="example_images_low_res/twice.png" alt="Zoomed twice" width="600"/><br>
 
 
-**Zoomed a hundred times.** <br>
+**Zoomed a hundred times** <br>
 <img src="example_images_low_res/hundred.png" alt="Zoomed a hundred times" width="600"/><br>
 
 
-**Zoomed a million times.** <br>
+**Zoomed a million times** <br>
 <img src="example_images_low_res/million.png" alt="Zoomed a million times" width="600"/><br>
 
 
-**Zoomed a trillion times.** <br
+**Zoomed a trillion times** <br>
 <img src="example_images_low_res/trillion.png" alt="Zoomed a trillion times" width="600"/><br>
 
 
@@ -43,9 +41,9 @@ initialized as:
 <img src="https://render.githubusercontent.com/render/math?math=G = \frac{1}{3\sqrt{2}}"><br>
 <img src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1/8}}"><br>
 
-
-The math is explained more thoroughly
-<a href="https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set">here</a>.
+I found the equation 
+<a href="https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set">here</a>,
+where the math is explained more thoroughly, if anyone is interested.
 
 
 [comment]: <> (```math)
