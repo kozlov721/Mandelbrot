@@ -159,9 +159,9 @@ where the math is explained more thoroughly, if anyone is interested.
 
 ## Building the app
 There are two options as for how to build this app. You can compile the source code
-for gpu or for cpu. Performance of the gpu version is much higher, but it only allows me to
-use less precise numerical types, so the maximum zoom_value is lower. <br>
-The performance of cpu version is much worse, but it allows larger zoom_value.
+for gpu or for cpu. The performance of the gpu version is very good, but it only allows me to
+use less precise numerical types, so the maximum zoom is lower. <br>
+The performance of cpu version is much worse (though still manageable), but it allows larger zoom.
 
 To build the app, simply use the provided makefile and type `make` or `make ACC=gpu`. <br>
 For compiling with ``ACC=gpu``, one must have installed ``nvc++`` compiler.
@@ -169,10 +169,10 @@ For compiling with ``ACC=gpu``, one must have installed ``nvc++`` compiler.
 
 ## Running the app
 The compiled app can be run as is, then the size of the window will be 1200x800.
-You can also pass different size as command line argument in the form of
+You can also pass different size as command line arguments in the form of
 ``
 $ ./mandelbrot WIDTH HEIGHT
 ``
-but be aware of keeping the correct ratio 3 : 2.
+but be aware of keeping the correct ratio 3:2.
 If you don't want to care about the ratio, you can omit the HEIGHT parameter,
 it will be automatically computed from WIDTH.
