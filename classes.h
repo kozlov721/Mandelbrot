@@ -36,8 +36,8 @@ class Mandelbrot {
     sf::Uint8 *pixels;
 
     void init_pixels();
-    int iterate(set_type c_r, set_type c_j) const;
-    void fill_color(unsigned short iters, unsigned int index);
+    int iterate(const set_type &c_r, const set_type &c_j) const;
+    void fill_color(int iters, int index);
 
 public:
     Mandelbrot(int width, int height);

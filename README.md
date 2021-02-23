@@ -24,7 +24,7 @@ Here are some examples:
 
 <br>
 
-The set is colored using this equation:
+The set is colored using this formula:
 
 
 <img src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} \cdot (1 - \cos(R \cdot n), 1 - \cos(G \cdot n), 1 - \cos(B \cdot n))">
@@ -32,7 +32,7 @@ The set is colored using this equation:
 [comment]: <> (```math)
 [comment]: <> (&#40;r, g, b&#41; = \frac{255}{2K} * &#40;1 - cos&#40;R * n&#41;, 1 - cos&#40;G * n&#41;, 1 - cos&#40;B * n&#41;&#41;)
 [comment]: <> (```)
-where n is the number of iterations and K, R, G, B are chosen parameters,
+where n is the number of computed iterations before the point exceeded from the set and K, R, G, B are chosen parameters,
 initialized as:
 
 
@@ -41,9 +41,8 @@ initialized as:
 <img src="https://render.githubusercontent.com/render/math?math=G = \frac{1}{3\sqrt{2}}"><br>
 <img src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1 / 8}}"><br>
 
-I have found the equation 
-<a href="https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set">here</a>,
-where the math is explained more thoroughly, if anyone is interested.
+For the formula I was inspired
+by <a href="https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set">this article</a>.
 
 
 [comment]: <> (```math)
@@ -156,6 +155,9 @@ where the math is explained more thoroughly, if anyone is interested.
         </td>
     </tr>
 </table>
+
+You can also move around using mouse.
+
 
 ## Building the app (for Linux)
 There are two options as for how to build this app. You can compile the source code

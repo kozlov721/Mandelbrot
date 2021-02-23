@@ -12,7 +12,6 @@
 #endif
 #define WIDTH_8K (3840 * 2)
 #define HEIGHT_8K (WIDTH_8K * 2 / 3)
-
 Mandelbrot::Mandelbrot(int w, int h) : width(w), height(h), len(w * h * 4) {
     pixels = new sf::Uint8[len];
     init_pixels();
@@ -44,7 +43,7 @@ Mandelbrot::Mandelbrot(int w, int h, int max_i,
     zoom_value = z;
 }
 
-inline int Mandelbrot::iterate(set_type c_r, set_type c_j) const {
+inline int Mandelbrot::iterate(const set_type &c_r, const set_type &c_j) const {
     set_type z_r = 0;
     set_type z_j = 0;
     set_type new_r;
@@ -61,7 +60,7 @@ inline int Mandelbrot::iterate(set_type c_r, set_type c_j) const {
     return i;
 }
 
-inline void Mandelbrot::fill_color(const unsigned short iters, const unsigned int index) {
+inline void Mandelbrot::fill_color(int iters, int index) {
     pixels[index] = short(255 * ((1 - std::cos(r_constant * float(iters) / k_constant)) / 2));
     pixels[index + 1] = short(255 * ((1 - std::cos(g_constant * float(iters) / k_constant)) / 2));
     pixels[index + 2] = short(255 * ((1 - std::cos(b_constant * float(iters) / k_constant)) / 2));
