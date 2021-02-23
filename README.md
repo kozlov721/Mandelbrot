@@ -4,6 +4,10 @@
 Simple app for zooming into the
 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.
 
+![Zoomed twice](example_images/twice.png)
+![Zoomed a hundred times](example_images/hundred.png)
+![Zoomed a million times](example_images/million.png)
+![Zoomed a trillion times](example_images/trillion.png)
 
 The set is colored using this equation:
 
@@ -21,6 +25,10 @@ initialized as:
 <img src="https://render.githubusercontent.com/render/math?math=R = 1"><br>
 <img src="https://render.githubusercontent.com/render/math?math=G = \frac{1}{3\sqrt{2}}"><br>
 <img src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1/8}}"><br>
+
+
+The math is explained more thoroughly
+<a href="https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set">here</a>.
 
 
 [comment]: <> (```math)
@@ -100,26 +108,26 @@ initialized as:
     <tr>
         <td>u</td>
         <td>K = K + 1</td>
-        <td>Press with shift for decrease.
-            Press with ctrl for slower change</td>
+        <td>Press shift for decrease.
+            Press ctrl for slower change</td>
     </tr>
     <tr>
         <td>i</td>
         <td>R = R + 0.1</td>
-        <td>Press with shift for decrease.
-            Press with ctrl for slower change</td>
+        <td>Press shift for decrease.
+            Press ctrl for slower change</td>
     </tr>
     <tr>
         <td>o</td>
         <td>R = R + 0.1</td>
-        <td>Press with shift for decrease.
-            Press with ctrl for slower change</td>
+        <td>Press shift for decrease.
+            Press ctrl for slower change</td>
     </tr>
     <tr>
         <td>p</td>
         <td>R = R + 0.1</td>
-        <td>Press with shift for decrease.
-            Press with ctrl for slower change</td>
+        <td>Press shift for decrease.
+            Press ctrl for slower change</td>
     </tr>
     <tr>
         <td>enter</td>
