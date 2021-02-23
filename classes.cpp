@@ -4,9 +4,9 @@
 #include <cassert>
 #include <iostream>
 
-#define SHIFT 0.08
+#define MOVE_STEP 0.08
 #ifdef GPU
-    #define ITER_SPEED 20
+    #define ITER_SPEED 25
 #else
     #define ITER_SPEED 15
 #endif
@@ -130,22 +130,6 @@ void Mandelbrot::zoom(bool in, bool fast) {
         zoom_value /= speed;
 }
 
-void Mandelbrot::move_left() {
-    move(SHIFT, 0);
-}
-
-void Mandelbrot::move_right() {
-    move(-SHIFT, 0);
-}
-
-void Mandelbrot::move_up() {
-    move(0, SHIFT);
-}
-
-void Mandelbrot::move_down() {
-    move(0, -SHIFT);
-}
-
 void Mandelbrot::reset(bool reset_zoom, bool reset_iters, bool reset_colors) {
     zoom_value = reset_zoom ? INITIAL_ZOOM : zoom_value;
     max_iterations_shift = reset_iters ? INITIAL_ITER_SHIFT : max_iterations_shift;
@@ -202,15 +186,23 @@ void Mandelbrot::set_b_constant(float b) {
     b_constant = b;
 }
 
-int Mandelbrot::getMaxIters() const {
+int Mandelbrot::get_max_iters() const {
     return max_iters;
+}
+
+int Mandelbrot::get_width() const {
+    return width;
+}
+
+int Mandelbrot::get_height() const {
+    return height;
 }
 
 /*----------------------------------------------*/
 
 Visualizer::Visualizer(int width, int height) :
         set(Mandelbrot(width, height)),
-        window(sf::VideoMode(width, height), "Mandelbrot"),
+        window(sf::VideoMode(width, height), "MandelbrotZoom"),
         info_background(sf::Vector2f(float(width) / 7,
                                          float(height) / 40 * 8.5)) {
     texture.create(width, height);
@@ -221,9 +213,23 @@ Visualizer::Visualizer(int width, int height) :
     info.setString("60\n1");
     info.setCharacterSize(height / 40);
     info.setFillColor(sf::Color::White);
+    last_mouse_position = sf::Mouse::getPosition(window);
+
 }
 
 void Visualizer::handle_events() {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && window.hasFocus()) {
+        sf::sleep(sf::milliseconds(10));
+        auto current_position = sf::Mouse::getPosition(window);
+        int d_x = current_position.x - last_mouse_position.x;
+        int d_y = current_position.y - last_mouse_position.y;
+        set_type d_r = set_type(d_x) / set.get_width() * 3;
+        set_type d_i = set_type(d_y) / set.get_height() * 2;
+        set.move(d_r * 1.5,
+                 d_i * 1.5);
+        update = true;
+    }
+
     sf::Event event{};
     while (window.pollEvent(event)) {
         float shift = sf::Keyboard::isKeyPressed(
@@ -244,19 +250,19 @@ void Visualizer::handle_events() {
             switch (event.key.code) {
             case sf::Keyboard::W:
             case sf::Keyboard::Up:
-                set.move_up();
+                set.move(0, MOVE_STEP);
                 break;
             case sf::Keyboard::S:
             case sf::Keyboard::Down:
-                set.move_down();
+                set.move(0, -MOVE_STEP);
                 break;
             case sf::Keyboard::A:
             case sf::Keyboard::Left:
-                set.move_left();
+                set.move(MOVE_STEP, 0);
                 break;
             case sf::Keyboard::D:
             case sf::Keyboard::Right:
-                set.move_right();
+                set.move(-MOVE_STEP, 0);
                 break;
             case sf::Keyboard::K:
                 set.zoom(true, shift < 0);
@@ -318,7 +324,7 @@ void Visualizer::update_info() {
                          "G: %.2f\n"
                          "B: %.2f",
             std::min(int(fps), 60), (long double) set.get_zoom(),
-            set.getMaxIters(), set.get_k_constant(), set.get_r_constant(),
+            set.get_max_iters(), set.get_k_constant(), set.get_r_constant(),
             set.get_g_constant(), set.get_b_constant());
     info.setString(std::string(info_string));
     clock.restart();
@@ -326,6 +332,7 @@ void Visualizer::update_info() {
 
 void Visualizer::run() {
     while (window.isOpen()) {
+        last_mouse_position = sf::Mouse::getPosition(window);
         handle_events();
         if (update) {
             set.adjust_max_iters();

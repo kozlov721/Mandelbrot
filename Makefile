@@ -1,4 +1,4 @@
-# Project: Mandelbrot Set Visualizer
+# Project: MandelbrotZoom Set Visualizer
 # Author: Martin Kozlovsky
 # Date: 22. 2. 2021
 
