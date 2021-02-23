@@ -157,14 +157,15 @@ where the math is explained more thoroughly, if anyone is interested.
     </tr>
 </table>
 
-## Building the app
+## Building the app (for Linux)
 There are two options as for how to build this app. You can compile the source code
-for gpu or for cpu. The performance of the gpu version is very good, but it only allows me to
+for GPU or for CPU. The performance of the GPU version is very good, but it only allows me to
 use less precise numerical types, so the maximum zoom is lower. <br>
-The performance of cpu version is much worse (though still manageable), but it allows larger zoom.
+The performance of CPU version is much worse (though still manageable), but it allows larger zoom.
 
 To build the app, simply use the provided makefile and type `make` or `make ACC=gpu`. <br>
-For compiling with ``ACC=gpu``, one must have installed ``nvc++`` compiler.
+For compiling with ``ACC=gpu``, one must have installed ``nvc++`` compiler, for both version
+there must be <a href="https://www.sfml-dev.org/">SFML library</a> available on the system.
 
 
 ## Running the app
