@@ -5,7 +5,7 @@ Simple app for zooming into the
 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.
 
 
-The set is color by using this equation:
+The set is colored using this equation:
 
 
 <img src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} \cdot (1 - cos(R \cdot n), 1 - cos(G \cdot n), 1 - cos(B \cdot n))">
@@ -60,12 +60,12 @@ initialized as:
     <tr>
         <td>j</td>
         <td>zoom in</td>
-        <td></td>
+        <td>Press shift for faster zooming.</td>
     </tr>
     <tr>
         <td>k</td>
         <td>zoom out</td>
-        <td></td>
+        <td>Press shift for faster zooming.</td>
     </tr>
     <tr>
         <td>h</td>
@@ -79,37 +79,47 @@ initialized as:
     </tr>
     <tr>
         <td>b</td>
-        <td>zoom back to initial state</td>
-        <td>It keeps the position, just resets the zoom,
-            so you can zoom back when you were.</td>
+        <td>zoom_value back to initial state</td>
+        <td>It keeps the position, just resets the zoom_value,
+            so you can zoom_value in again to where you were.</td>
     </tr>
     <tr>
         <td>r</td>
-        <td>zoom back and reset all parameters</td>
-        <td>It zooms back to the original state
+        <td>zoom_value back and reset all parameters</td>
+        <td>
+            Zooms back to the original state
             and also keeps the position. In addition,
-            it resets all parameters to their default values.
+            it resets the value of maximum iterations.
         </td>
+    </tr>
+    <tr>
+        <td>c</td>
+        <td>color reset</td>
+        <td>Resets K, R, G and B constants to theirs default values.</td>
     </tr>
     <tr>
         <td>u</td>
         <td>K = K + 1</td>
-        <td>Press with shift for decrease.</td>
+        <td>Press with shift for decrease.
+            Press with ctrl for slower change</td>
     </tr>
     <tr>
         <td>i</td>
         <td>R = R + 0.1</td>
-        <td>Press with shift for decrease.</td>
+        <td>Press with shift for decrease.
+            Press with ctrl for slower change</td>
     </tr>
     <tr>
         <td>o</td>
         <td>R = R + 0.1</td>
-        <td>Press with shift for decrease.</td>
+        <td>Press with shift for decrease.
+            Press with ctrl for slower change</td>
     </tr>
     <tr>
         <td>p</td>
         <td>R = R + 0.1</td>
-        <td>Press with shift for decrease.</td>
+        <td>Press with shift for decrease.
+            Press with ctrl for slower change</td>
     </tr>
     <tr>
         <td>enter</td>
@@ -122,7 +132,20 @@ initialized as:
 ## Building the app
 There are two options as for how to build this app. You can compile the source code
 for gpu or for cpu. Performance of the gpu version is much higher, but it only allows me to
-use less precise numerical types, so the maximum zoom is lower. <br>
-The performance of cpu version is much worse, but it allows larger zoom.
+use less precise numerical types, so the maximum zoom_value is lower. <br>
+The performance of cpu version is much worse, but it allows larger zoom_value.
 
 To build the app, simply use the provided makefile and type `make` or `make ACC=gpu`.
+
+
+## Running the app
+The compiled app can be run as is, then the size of the window will be 1200x800.
+You can also pass different size as command line argument in the form of
+``
+$ ./mandelbrot WIDTH HEIGHT
+``
+but be aware of keeping the correct ratio 3 : 2.
+If you don't want to care about the ratio,
+you can omit the HEIGHT parameter, it will be automatically computed
+from WIDTH.
+

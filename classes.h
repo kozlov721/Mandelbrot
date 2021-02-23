@@ -3,9 +3,17 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
+
 #define INITIAL_MAX_ITERS 30
 #define INITIAL_ITER_SHIFT 0
+#define INITIAL_REAL_SHIFT .7
+#define INITIAL_IMAG_SHIFT .0
 #define INITIAL_ZOOM 1.
+#define INITIAL_K 10.f
+#define INITIAL_R 1.f
+#define INITIAL_G 0.2357022604f
+#define INITIAL_B 0.58490406881f
+
 
 #ifdef GPU
 typedef double set_type;
@@ -15,18 +23,22 @@ typedef long double set_type;
 
 class Mandelbrot {
 private:
-    float k_constant = 10.;
-    float r_constant = 1.f;
-    float g_constant = 0.2357022604f;
-    float b_constant = 0.58490406881f;
+    float k_constant = INITIAL_K;
+    float r_constant = INITIAL_R;
+    float g_constant = INITIAL_G;
+    float b_constant = INITIAL_B;
     int max_iterations_shift = INITIAL_ITER_SHIFT;
+public:
+    int getMaxIters() const;
+
+private:
+    int max_iters = INITIAL_MAX_ITERS;
+    set_type zoom_value = INITIAL_ZOOM;
+    set_type real_shift = INITIAL_REAL_SHIFT;
+    set_type imag_shift = INITIAL_IMAG_SHIFT;
     int width;
     int height;
     int len;
-    int max_iters = INITIAL_MAX_ITERS;
-    set_type zoom = INITIAL_ZOOM;
-    set_type real_shift = .7;
-    set_type imag_shift = .0;
     sf::Uint8 *pixels;
 
     void init_pixels();
@@ -39,29 +51,27 @@ public:
     Mandelbrot(int width, int height, int max_iters,
                set_type real_shift, set_type imag_shift, set_type zoom);
     ~Mandelbrot();
-//    #pragma acc routine
     void generate();
     void adjust_max_iters();
     void save(const std::string &name) const;
     void change_iter_shift(int change);
-    set_type get_zoom() const;
-    sf::Uint8 *get_pixels();
-    void zoom_in();
-    void zoom_out();
+    void zoom(bool in, bool fast);
     void move_left();
     void move_right();
     void move_up();
     void move_down();
-    void reset(bool reset_speed);
+    void reset(bool reset_zoom, bool reset_iters, bool reset_colors);
 
-    float getKConstant() const;
-    void setKConstant(float kConstant);
-    float getRConstant() const;
-    void setRConstant(float rConstant);
-    float getGConstant() const;
-    void setGConstant(float gConstant);
-    float getBConstant() const;
-    void setBConstant(float bConstant);
+    set_type get_zoom() const;
+    sf::Uint8 *get_pixels();
+    float get_k_constant() const;
+    void set_k_constant(float k_constant);
+    float get_r_constant() const;
+    void set_r_constant(float r_constant);
+    float get_g_constant() const;
+    void set_g_constant(float g_constant);
+    float get_b_constant() const;
+    void set_b_constant(float b_constant);
 };
 
 /*---------------------------------------*/
@@ -75,8 +85,10 @@ private:
     sf::Clock clock;
     sf::Font font;
     sf::Text info;
+    sf::RectangleShape info_background;
     bool update = true;
-    char info_string[100] = {'\0'};
+    bool toggle_info = true;
+    char info_string[300] = {'\0'};
 
     void handle_events();
     void update_info();

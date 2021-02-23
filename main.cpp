@@ -1,8 +1,13 @@
+// Author: Martin Kozlovsky
+// Github: https://github.com/xkozlov1/Mandelbrot
+//
+// Have fun!
+
 #include "classes.h"
+
 
 #define DEFAULT_WIDTH (300 * 4)
 #define DEFAULT_HEIGHT (200 * 4)
-#define SUCCESS 0
 
 
 int main(int args, const char **argv) {
@@ -19,5 +24,5 @@ int main(int args, const char **argv) {
 
     Visualizer app(width, height);
     app.run();
-    return SUCCESS;
+    return 0;
 }
