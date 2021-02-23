@@ -27,7 +27,7 @@ Here are some examples:
 The set is colored using this equation:
 
 
-<img src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} \cdot (1 - cos(R \cdot n), 1 - cos(G \cdot n), 1 - cos(B \cdot n))">
+<img src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} \cdot (1 - \cos(R \cdot n), 1 - \cos(G \cdot n), 1 - \cos(B \cdot n))">
 
 [comment]: <> (```math)
 [comment]: <> (&#40;r, g, b&#41; = \frac{255}{2K} * &#40;1 - cos&#40;R * n&#41;, 1 - cos&#40;G * n&#41;, 1 - cos&#40;B * n&#41;&#41;)
@@ -39,9 +39,9 @@ initialized as:
 <img src="https://render.githubusercontent.com/render/math?math=K = 10"><br>
 <img src="https://render.githubusercontent.com/render/math?math=R = 1"><br>
 <img src="https://render.githubusercontent.com/render/math?math=G = \frac{1}{3\sqrt{2}}"><br>
-<img src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1/8}}"><br>
+<img src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1 / 8}}"><br>
 
-I found the equation 
+I have found the equation 
 <a href="https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set">here</a>,
 where the math is explained more thoroughly, if anyone is interested.
 
