@@ -158,7 +158,8 @@ for gpu or for cpu. Performance of the gpu version is much higher, but it only a
 use less precise numerical types, so the maximum zoom_value is lower. <br>
 The performance of cpu version is much worse, but it allows larger zoom_value.
 
-To build the app, simply use the provided makefile and type `make` or `make ACC=gpu`.
+To build the app, simply use the provided makefile and type `make` or `make ACC=gpu`. <br>
+For compiling with ``ACC=gpu``, one must have installed ``nvc++`` compiler.
 
 
 ## Running the app
@@ -168,7 +169,5 @@ You can also pass different size as command line argument in the form of
 $ ./mandelbrot WIDTH HEIGHT
 ``
 but be aware of keeping the correct ratio 3 : 2.
-If you don't want to care about the ratio,
-you can omit the HEIGHT parameter, it will be automatically computed
-from WIDTH.
-
+If you don't want to care about the ratio, you can omit the HEIGHT parameter,
+it will be automatically computed from WIDTH.
