@@ -4,7 +4,7 @@
 Simple app for zooming into the
 <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.
 
-![Zoomed twice](example_images/twice.png =1500x1000)
+<img src="example_images/twice.png" alt="drawing" width="1500"/>
 ![Zoomed a hundred times](example_images/hundred.png =1500x1000)
 ![Zoomed a million times](example_images/million.png =1500x1000)
 ![Zoomed a trillion times](example_images/trillion.png =1500x1000)
