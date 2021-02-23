@@ -216,7 +216,7 @@ Visualizer::Visualizer(int width, int height) :
     texture.create(width, height);
     info_background.setFillColor(sf::Color::Black);
     sprite = sf::Sprite(texture);
-    assert(font.loadFromFile("arial.ttf"));
+    assert(font.loadFromFile("fonts/arial.ttf"));
     info.setFont(font);
     info.setString("60\n1");
     info.setCharacterSize(height / 40);
@@ -242,23 +242,29 @@ void Visualizer::handle_events() {
             break;
         case sf::Event::KeyPressed:
             switch (event.key.code) {
-            case sf::Keyboard::A:
-                set.move_left();
-                break;
-            case sf::Keyboard::D:
-                set.move_right();
-                break;
             case sf::Keyboard::W:
                 set.move_up();
                 break;
             case sf::Keyboard::S:
                 set.move_down();
                 break;
+            case sf::Keyboard::A:
+                set.move_left();
+                break;
+            case sf::Keyboard::D:
+                set.move_right();
+                break;
             case sf::Keyboard::K:
                 set.zoom(true, shift < 0);
                 break;
             case sf::Keyboard::J:
                 set.zoom(false, shift < 0);
+                break;
+            case sf::Keyboard::H:
+                set.change_iter_shift(-5);
+                break;
+            case sf::Keyboard::L:
+                set.change_iter_shift(5);
                 break;
             case sf::Keyboard::R:
                 set.reset(true, true, false);
@@ -268,12 +274,6 @@ void Visualizer::handle_events() {
                 break;
             case sf::Keyboard::C:
                 set.reset(false, false, true);
-                break;
-            case sf::Keyboard::H:
-                set.change_iter_shift(-5);
-                break;
-            case sf::Keyboard::L:
-                set.change_iter_shift(5);
                 break;
             case sf::Keyboard::U:
                 set.set_k_constant(set.get_k_constant() + speed * shift * 0.5f);

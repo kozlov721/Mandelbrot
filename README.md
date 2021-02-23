@@ -145,6 +145,11 @@ where the math is explained more thoroughly, if anyone is interested.
             Press ctrl for slower change</td>
     </tr>
     <tr>
+        <td>t</td>
+        <td>toggle info</td>
+        <td></td>
+    </tr>
+    <tr>
         <td>enter</td>
         <td>capture</td>
         <td>Saves the current part of the set as a .ppm image in 8K.
