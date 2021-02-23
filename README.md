@@ -61,22 +61,22 @@ where the math is explained more thoroughly, if anyone is interested.
         <th>Notes</th>
     </tr>
     <tr>
-        <td>w</td>
+        <td>w, up</td>
         <td>move up</td>
         <td></td>
     </tr>
     <tr>
-        <td>s</td>
+        <td>s, down</td>
         <td>move down</td>
         <td></td>
     </tr>
     <tr>
-        <td>a</td>
+        <td>a, left</td>
         <td>move left</td>
         <td></td>
     </tr>
     <tr>
-        <td>d</td>
+        <td>d, right</td>
         <td>move right</td>
         <td></td>
     </tr>

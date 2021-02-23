@@ -243,15 +243,19 @@ void Visualizer::handle_events() {
         case sf::Event::KeyPressed:
             switch (event.key.code) {
             case sf::Keyboard::W:
+            case sf::Keyboard::Up:
                 set.move_up();
                 break;
             case sf::Keyboard::S:
+            case sf::Keyboard::Down:
                 set.move_down();
                 break;
             case sf::Keyboard::A:
+            case sf::Keyboard::Left:
                 set.move_left();
                 break;
             case sf::Keyboard::D:
+            case sf::Keyboard::Right:
                 set.move_right();
                 break;
             case sf::Keyboard::K:
