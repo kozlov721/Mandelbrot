@@ -7,7 +7,7 @@ GPU_COMPILER = pgc++
 STANDARD = c++20
 COMMON_FLAGS = -std=$(STANDARD) -lsfml-graphics -lsfml-window -lsfml-system
 CPU_FLAGS = $(COMMON_FLAGS) -fopenmp -Ofast -ffast-math
-GPU_FLAGS = $(COMMON_FLAGS) -acc -fast -O4 -DGPU
+GPU_FLAGS = $(COMMON_FLAGS) -acc -fast -fopenmp -O4 -DGPU
 OUTPUT = mandelbrot
 
 $(OUTPUT) : main.cpp classes.cpp classes.h

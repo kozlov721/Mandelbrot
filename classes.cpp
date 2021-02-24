@@ -212,12 +212,75 @@ Visualizer::Visualizer(int width, int height) :
     info.setString("60\n1");
     info.setCharacterSize(height / 40);
     info.setFillColor(sf::Color::White);
-    last_mouse_position = sf::Mouse::getPosition(window);
 
 }
 
 void Visualizer::handle_events() {
+
+    float shift = sf::Keyboard::isKeyPressed(
+            sf::Keyboard::LShift
+    ) || sf::Keyboard::isKeyPressed(
+            sf::Keyboard::RShift
+    ) ? -1.f : 1.f;
+    float speed = sf::Keyboard::isKeyPressed(
+            sf::Keyboard::LControl
+    ) || sf::Keyboard::isKeyPressed(
+            sf::Keyboard::RControl
+    ) ? 0.1f : 1.f;
+
+    sf::Event event{};
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed)
+            window.close();
+        else if (event.type == sf::Event::KeyPressed) {
+            auto key_code = event.key.code;
+#ifndef GPU
+            if (key_code == sf::Keyboard::W
+                    || key_code == sf::Keyboard::Up)
+                set.move(0, MOVE_STEP);
+            else if (key_code == sf::Keyboard::S
+                    || key_code == sf::Keyboard::Down)
+                set.move(0, -MOVE_STEP);
+            else if (key_code == sf::Keyboard::A
+                    || key_code == sf::Keyboard::Left)
+                set.move(MOVE_STEP, 0);
+            else if (key_code == sf::Keyboard::D
+                    || key_code == sf::Keyboard::Right)
+                set.move(-MOVE_STEP, 0);
+            else if (key_code == sf::Keyboard::K)
+                set.zoom(true, shift < 0);
+            else if (key_code == sf::Keyboard::J)
+                set.zoom(false, shift < 0);
+            else if (key_code == sf::Keyboard::H)
+                set.change_iter_shift(-5);
+            else if (key_code == sf::Keyboard::L)
+                set.change_iter_shift(5);
+            else
+#endif
+            if (key_code == sf::Keyboard::R)
+                set.reset(true, true, false);
+            else if (key_code == sf::Keyboard::B)
+                set.reset(true, false, false);
+            else if (key_code == sf::Keyboard::C)
+                set.reset(false, false, true);
+            else if (key_code == sf::Keyboard::U)
+                set.set_k_constant(set.get_k_constant() + speed * shift * 0.5f);
+            else if (key_code == sf::Keyboard::I)
+                set.set_r_constant(set.get_r_constant() + speed * shift * 0.1f);
+            else if (key_code == sf::Keyboard::O)
+                set.set_g_constant(set.get_g_constant() + speed * shift * 0.1f);
+            else if (key_code == sf::Keyboard::P)
+                set.set_b_constant(set.get_b_constant() + speed * shift * 0.1f);
+            else if (key_code == sf::Keyboard::T)
+                toggle_info = !toggle_info;
+            else if (key_code == sf::Keyboard::Enter)
+                set.save("mandelbrot" + std::to_string(set.get_zoom()) + ".ppm");
+            update = true;
+        }
+    }
+
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && window.hasFocus()) {
+        sf::Vector2i last_mouse_position = sf::Mouse::getPosition(window);
         sf::sleep(sf::milliseconds(10));
         auto current_position = sf::Mouse::getPosition(window);
         int d_x = current_position.x - last_mouse_position.x;
@@ -228,89 +291,40 @@ void Visualizer::handle_events() {
                  d_i * 1.5);
         update = true;
     }
-
-    sf::Event event{};
-    while (window.pollEvent(event)) {
-        float shift = sf::Keyboard::isKeyPressed(
-                sf::Keyboard::LShift
-        ) || sf::Keyboard::isKeyPressed(
-                sf::Keyboard::RShift
-        ) ? -1.f : 1.f;
-        float speed = sf::Keyboard::isKeyPressed(
-                sf::Keyboard::LControl
-        ) || sf::Keyboard::isKeyPressed(
-                sf::Keyboard::RControl
-        ) ? 0.1f : 1.f;
-        switch (event.type) {
-        case sf::Event::Closed:
-            window.close();
-            break;
-        case sf::Event::KeyPressed:
-            switch (event.key.code) {
-            case sf::Keyboard::W:
-            case sf::Keyboard::Up:
-                set.move(0, MOVE_STEP);
-                break;
-            case sf::Keyboard::S:
-            case sf::Keyboard::Down:
-                set.move(0, -MOVE_STEP);
-                break;
-            case sf::Keyboard::A:
-            case sf::Keyboard::Left:
-                set.move(MOVE_STEP, 0);
-                break;
-            case sf::Keyboard::D:
-            case sf::Keyboard::Right:
-                set.move(-MOVE_STEP, 0);
-                break;
-            case sf::Keyboard::K:
-                set.zoom(true, shift < 0);
-                break;
-            case sf::Keyboard::J:
-                set.zoom(false, shift < 0);
-                break;
-            case sf::Keyboard::H:
-                set.change_iter_shift(-5);
-                break;
-            case sf::Keyboard::L:
-                set.change_iter_shift(5);
-                break;
-            case sf::Keyboard::R:
-                set.reset(true, true, false);
-                break;
-            case sf::Keyboard::B:
-                set.reset(true, false, false);
-                break;
-            case sf::Keyboard::C:
-                set.reset(false, false, true);
-                break;
-            case sf::Keyboard::U:
-                set.set_k_constant(set.get_k_constant() + speed * shift * 0.5f);
-                break;
-            case sf::Keyboard::I:
-                set.set_r_constant(set.get_r_constant() + speed * shift * 0.1f);
-                break;
-            case sf::Keyboard::O:
-                set.set_g_constant(set.get_g_constant() + speed * shift * 0.1f);
-                break;
-            case sf::Keyboard::P:
-                set.set_b_constant(set.get_b_constant() + speed * shift * 0.1f);
-                break;
-            case sf::Keyboard::T:
-                toggle_info = !toggle_info;
-                break;
-            case sf::Keyboard::Enter:
-                set.save("mandelbrot" + std::to_string(set.get_zoom()) + ".ppm");
-                break;
-            default:
-                break;
-            }
+#ifdef GPU
+    if (window.hasFocus()) {
+//        sf::sleep(sf::milliseconds(5));
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            set.move(0, MOVE_STEP);
             update = true;
-            break;
-        default:
-            break;
+        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            set.move(0, -MOVE_STEP);
+            update = true;
+        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            set.move(MOVE_STEP, 0);
+            update = true;
+        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            set.move(-MOVE_STEP, 0);
+            update = true;
+        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
+            set.zoom(true, shift < 0);
+            update = true;
+        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
+            set.zoom(false, shift < 0);
+            update = true;
+        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
+            set.change_iter_shift(-5);
+            update = true;
+        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) {
+            set.change_iter_shift(5);
+            update = true;
         }
     }
+#endif
 }
 
 void Visualizer::update_info() {
@@ -331,21 +345,40 @@ void Visualizer::update_info() {
 
 void Visualizer::run() {
     while (window.isOpen()) {
-        last_mouse_position = sf::Mouse::getPosition(window);
-        handle_events();
-        if (update) {
-            set.adjust_max_iters();
-            set.generate();
-            update = false;
+#ifdef GPU
+        #pragma omp parallel sections num_threads(2)
+        {
+            #pragma omp section
+            {
+#endif
+                handle_events();
+#ifdef GPU
+            }
+            #pragma omp section
+            {
+#endif
+                if (update) {
+                    set.adjust_max_iters();
+                    set.generate();
+                    update = false;
+                }
+#ifdef GPU
+            }
         }
-        texture.update(set.get_pixels());
-        update_info();
-        window.clear();
-        window.draw(sprite);
-        if (toggle_info) {
-            window.draw(info_background);
-            window.draw(info);
+
+
+#pragma omp single
+#endif
+        {
+            texture.update(set.get_pixels());
+            window.clear();
+            window.draw(sprite);
+            if (toggle_info) {
+                update_info();
+                window.draw(info_background);
+                window.draw(info);
+            }
+            window.display();
         }
-        window.display();
     }
 }

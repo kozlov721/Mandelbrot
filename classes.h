@@ -70,7 +70,6 @@ public:
 /*---------------------------------------*/
 
 class Visualizer {
-private:
     Mandelbrot set;
     sf::RenderWindow window;
     sf::Texture texture;
@@ -82,7 +81,6 @@ private:
     bool update = true;
     bool toggle_info = true;
     char info_string[300] = {'\0'};
-    sf::Vector2i last_mouse_position;
 
     void handle_events();
     void update_info();
