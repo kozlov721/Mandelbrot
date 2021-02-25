@@ -78,6 +78,8 @@ class Visualizer {
     sf::Font font;
     sf::Text info;
     sf::RectangleShape info_background;
+    int width_shift = 0;
+    int height_shift = 0;
     bool update = true;
     bool toggle_info = true;
     char info_string[300] = {'\0'};
