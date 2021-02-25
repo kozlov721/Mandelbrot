@@ -88,7 +88,7 @@ void Mandelbrot::generate() {
         fill_color(iterations, i);
     }
 #ifdef GPU
-    #pragma acc update self(this->pixels[0:this->len])
+    #pragma acc update self(pixels[0:len])
     }
 #endif
 }

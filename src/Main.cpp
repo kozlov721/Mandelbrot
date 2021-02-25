@@ -2,9 +2,12 @@
 // Github: https://github.com/xkozlov1/Mandelbrot
 //
 // Have fun!
-
-#include "classes.h"
-
+#ifdef OLD
+    #include "classes.h"
+#else
+    #include "Window.h"
+    #include "Fractals.h"
+#endif
 
 #define DEFAULT_WIDTH (300 * 4)
 #define DEFAULT_HEIGHT (200 * 4)
@@ -21,8 +24,13 @@ int main(int args, const char **argv) {
         width = std::stoi(argv[1]);
         height = width * 2 / 3;
     }
-
-    Visualizer app(width, height);
-    app.run();
+#ifdef OLD
+    Visualizer window(width, height);
+#else
+    MandelbrotSet fractal;
+//    JuliaSet fractal(0.285, 0);
+    Window window(width, height, &fractal);
+#endif
+    window.run();
     return 0;
 }

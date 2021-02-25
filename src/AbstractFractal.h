@@ -1,22 +1,16 @@
 #pragma once
 #include <cstdint>
 
-#ifdef GPU
 typedef double set_type;
-#else
-typedef long double set_type;
-#endif
 
 class Fractal {
-    void *additional_params;
 protected:
-    virtual int iterate(const set_type &c_r, const set_type &c_j) const = 0;
-    virtual void fill_color(int index, int iterations) = 0;
+    set_type *additional_parameters = nullptr;
 public:
-    Fractal();
-    explicit Fractal(void* params);
-    void generate(set_type zoom, int width, int height,
-                  int width_shift, int height_shift,
+    virtual void generate(set_type zoom, int width, int height,
                   set_type real_axis_shift, set_type imag_axis_shift,
-                  uint8_t *pixels);
+                  int max_iters, uint8_t *pixels) const = 0;
+    virtual ~Fractal() = default;
+    virtual const set_type *get_params(int *n_params) const = 0;
+    virtual void set_param(set_type param, int param_index) = 0;
 };

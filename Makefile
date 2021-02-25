@@ -5,14 +5,15 @@
 CPU_COMPILER = g++
 GPU_COMPILER = pgc++
 STANDARD = c++20
-COMMON_FLAGS = -std=$(STANDARD) -lsfml-graphics -lsfml-window -lsfml-system
-CPU_FLAGS = $(COMMON_FLAGS) -fopenmp -Ofast -ffast-math
-GPU_FLAGS = $(COMMON_FLAGS) -acc -fast -fopenmp -O4 -DGPU
+COMMON_FLAGS = -std=$(STANDARD) -lsfml-graphics -lsfml-window -lsfml-system -fopenmp
+CPU_FLAGS = $(COMMON_FLAGS) -Ofast -ffast-math
+GPU_FLAGS = $(COMMON_FLAGS) -acc -fast -O4 -DGPU
 OUTPUT = mandelbrot
 
-$(OUTPUT) : main.cpp classes.cpp classes.h
+$(OUTPUT) : src/Main.cpp src/classes.cpp src/classes.h
 ifeq ($(ACC), gpu)
-	$(GPU_COMPILER) $(GPU_FLAGS) -o $(OUTPUT)_gpu main.cpp classes.cpp
+	$(GPU_COMPILER) -o $(OUTPUT)_gpu src/main.cpp src/Window.cpp src/AbstractFractal.cpp src/FractalHandler.cpp src/Fractals.cpp $(GPU_FLAGS)
 else
-	$(CPU_COMPILER) $(CPU_FLAGS) -o $(OUTPUT)_cpu main.cpp classes.cpp
+	$(CPU_COMPILER) -o $(OUTPUT)_cpu src/main.cpp src/classes.cpp $(CPU_FLAGS)
 endif
+	rm main.o classes.o
