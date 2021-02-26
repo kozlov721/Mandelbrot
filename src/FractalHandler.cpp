@@ -1,16 +1,15 @@
 #include <cmath>
 #include <fstream>
 
-#include "FractalHandler.h"
+#include "../include/FractalHandler.h"
 
 #define ITER_SPEED 20
 #define WIDTH_8K (3840 * 2)
 #define HEIGHT_8K (WIDTH_8K * 2 / 3)
 
-FractalHandler::FractalHandler(int width, int height, Fractal *fractal) :
-        width(width), height(height), len(height * width * 4), fractal(fractal) {}
+FractalHandler::FractalHandler(Fractal *fractal): fractal(fractal) {}
 
-void FractalHandler::generate(uint8_t *pixels) {
+void FractalHandler::generate(int width, int height, uint8_t *pixels) {
     fractal->generate(zoom_value, width, height,
                       real_shift, imag_shift, max_iters, pixels);
 }
@@ -39,6 +38,10 @@ void FractalHandler::change_iter_shift(int change) {
     max_iterations_shift += change;
 }
 
+void FractalHandler::change_param(int param_index, bool fast, bool reverse) const {
+    fractal->change_param(param_index, fast, reverse ? -1 : 1);
+}
+
 void FractalHandler::zoom(set_type amount) {
     zoom_value *= amount;
 }
@@ -57,6 +60,8 @@ set_type FractalHandler::get_zoom() const {
     return zoom_value;
 }
 
-int FractalHandler::get_max_iters() const {
-    return max_iters;
+std::string FractalHandler::generate_info_string() const {
+    return "Zoom: " + std::to_string(zoom_value) + "\n"
+         + "Iterations: " + std::to_string(max_iters) + "\n"
+         + fractal->get_params_info();
 }

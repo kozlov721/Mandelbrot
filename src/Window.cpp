@@ -1,19 +1,21 @@
-#include "Window.h"
 #include <cassert>
+#include "../include/Window.h"
+
 #define MOVE_STEP 0.08
 #define CHANNELS 4
-#include <iostream>
+
+
 Window::Window(int width, int height, Fractal *fractal):
         width(width), height(height), len(width * height * CHANNELS),
-        fractal(FractalHandler(width, height, fractal)),
-        window(sf::VideoMode(width, height), "MandelbrotZoom"),
-        info_background(sf::Vector2f(float(width) / 7,
-                                         float(height) / 40 * 8.5)) {
+        fractal(FractalHandler(fractal)),
+        window(sf::VideoMode(width, height), "MandelbrotZoom") {
+
+    info_background.setSize(sf::Vector2f(
+            float(width) / 7.f,
+            float(height) / 40.f * (3.f + float(fractal->get_num_params())) * 1.2f
+            ));
     window.setVerticalSyncEnabled(true);
-    pixels = new sf::Uint8[len];
-    init_pixels();
-    #pragma acc enter data create(pixels[0:len])
-    #pragma acc update device(pixels[0:len])
+    create_pixels();
     texture.create(width, height);
     info_background.setFillColor(sf::Color::Black);
     sprite = sf::Sprite(texture);
@@ -25,8 +27,7 @@ Window::Window(int width, int height, Fractal *fractal):
 }
 
 Window::~Window() {
-    #pragma acc exit data delete(pixels[0:len])
-    delete[] pixels;
+    destroy_pixels();
 }
 
 void Window::handle_events() {
@@ -56,6 +57,24 @@ void Window::handle_events() {
                 toggle_info = !toggle_info;
             else if (key_code == sf::Keyboard::Enter)
                 fractal.save("mandelbrot" + std::to_string(fractal.get_zoom()) + ".ppm");
+            else if (key_code == sf::Keyboard::Num1)
+                fractal.change_param(0, shift, ctrl);
+            else if (key_code == sf::Keyboard::Num2)
+                fractal.change_param(1, shift, ctrl);
+            else if (key_code == sf::Keyboard::Num3)
+                fractal.change_param(2, shift, ctrl);
+            else if (key_code == sf::Keyboard::Num4)
+                fractal.change_param(3, shift, ctrl);
+            else if (key_code == sf::Keyboard::Num5)
+                fractal.change_param(4, shift, ctrl);
+            else if (key_code == sf::Keyboard::Num6)
+                fractal.change_param(5, shift, ctrl);
+            else if (key_code == sf::Keyboard::Num7)
+                fractal.change_param(6, shift, ctrl);
+            else if (key_code == sf::Keyboard::Num8)
+                fractal.change_param(7, shift, ctrl);
+            else if (key_code == sf::Keyboard::Num9)
+                fractal.change_param(8, shift, ctrl);
             update = true;
         }
     }
@@ -64,7 +83,7 @@ void Window::handle_events() {
         sf::Vector2i last_mouse_position = sf::Mouse::getPosition(window);
         if (last_mouse_position.y <= 0) {
             while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-                sf::sleep(sf::milliseconds(50));
+                sf::sleep(sf::milliseconds(100));
             return;
         }
         sf::sleep(sf::milliseconds(20));
@@ -96,10 +115,10 @@ void Window::handle_events() {
             fractal.move(-MOVE_STEP, 0);
             update = true;
         } if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
-            fractal.zoom(ctrl ? 1.05 : 1.03);
+            fractal.zoom(shift ? 1.05 : 1.03);
             update = true;
         } if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
-            fractal.zoom(ctrl ? 1. / 1.05 : 1. / 1.03);
+            fractal.zoom(shift ? 1. / 1.05 : 1. / 1.03);
             update = true;
         } if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
             fractal.change_iter_shift(-5);
@@ -113,13 +132,23 @@ void Window::handle_events() {
 
 void Window::update_info() {
     float fps = 1.f / clock.getElapsedTime().asSeconds();
-    sprintf(info_string, "FPS: %d\n"
-                         "Zoom: %.3Le\n"
-                         "Iterations: %d\n",
-            std::min(int(fps), 60), (long double) fractal.get_zoom(),
-            fractal.get_max_iters());
+    info_string = "FPS: " + std::to_string(std::min(int(fps), 60)) + "\n"
+                + fractal.generate_info_string();
     info.setString(std::string(info_string));
     clock.restart();
+}
+
+void Window::create_pixels() {
+    pixels = new sf::Uint8[len];
+    #pragma acc enter data create(pixels[0:len])
+    for (int i = 0; i < width * height * 4; i += 4)
+        pixels[i + 3] = 255;
+    #pragma acc update device(pixels[0:len])
+}
+
+void Window::destroy_pixels() {
+    #pragma acc exit data delete(pixels[0:len])
+    delete[] pixels;
 }
 
 void Window::run() {
@@ -132,10 +161,10 @@ void Window::run() {
             }
             #pragma omp section
             {
-                update_info();
                 if (update) {
+                    update_info();
                     fractal.adjust_max_iters();
-                    fractal.generate(pixels);
+                    fractal.generate(int(width), int(height), pixels);
                     update = false;
                 }
             }
@@ -149,9 +178,4 @@ void Window::run() {
         }
         window.display();
     }
-}
-
-void Window::init_pixels() {
-    for (int i = 0; i < width * height * 4; i += 4)
-        pixels[i + 3] = 255;
 }
