@@ -49,33 +49,39 @@ void Window::handle_events() {
             auto key_code = event.key.code;
             if (key_code == sf::Keyboard::Escape)
                 window.close();
-            else if (key_code == sf::Keyboard::R)
-                fractal.reset(true, true);
-            else if (key_code == sf::Keyboard::B)
-                fractal.reset(true, false);
-            else if (key_code == sf::Keyboard::T)
+            else if (key_code == sf::Keyboard::R) {
+                fractal.reset(true, true, false);
+                update = true;
+            } else if (key_code == sf::Keyboard::P) {
+                fractal.reset(false, false, true);
+                update = true;
+            } else if (key_code == sf::Keyboard::B) {
+                fractal.reset(true, false, false);
+                update = true;
+            } else if (key_code == sf::Keyboard::T) {
                 toggle_info = !toggle_info;
-            else if (key_code == sf::Keyboard::Enter)
+                update = true;
+            } else if (key_code == sf::Keyboard::Enter) {
                 fractal.save("mandelbrot" + std::to_string(fractal.get_zoom()) + ".ppm");
-            else if (key_code == sf::Keyboard::Num1)
-                fractal.change_param(0, shift, ctrl);
-            else if (key_code == sf::Keyboard::Num2)
-                fractal.change_param(1, shift, ctrl);
-            else if (key_code == sf::Keyboard::Num3)
-                fractal.change_param(2, shift, ctrl);
-            else if (key_code == sf::Keyboard::Num4)
-                fractal.change_param(3, shift, ctrl);
-            else if (key_code == sf::Keyboard::Num5)
-                fractal.change_param(4, shift, ctrl);
-            else if (key_code == sf::Keyboard::Num6)
-                fractal.change_param(5, shift, ctrl);
-            else if (key_code == sf::Keyboard::Num7)
-                fractal.change_param(6, shift, ctrl);
-            else if (key_code == sf::Keyboard::Num8)
-                fractal.change_param(7, shift, ctrl);
-            else if (key_code == sf::Keyboard::Num9)
-                fractal.change_param(8, shift, ctrl);
-            update = true;
+            } else if (key_code == sf::Keyboard::Num1) {
+                update = fractal.change_param(0, shift, ctrl);
+            } else if (key_code == sf::Keyboard::Num2) {
+                update = fractal.change_param(1, shift, ctrl);
+            } else if (key_code == sf::Keyboard::Num3) {
+                update = fractal.change_param(2, shift, ctrl);
+            } else if (key_code == sf::Keyboard::Num4) {
+                update = fractal.change_param(3, shift, ctrl);
+            } else if (key_code == sf::Keyboard::Num5) {
+                update = fractal.change_param(4, shift, ctrl);
+            } else if (key_code == sf::Keyboard::Num6) {
+                update = fractal.change_param(5, shift, ctrl);
+            } else if (key_code == sf::Keyboard::Num7) {
+                update = fractal.change_param(6, shift, ctrl);
+            } else if (key_code == sf::Keyboard::Num8) {
+                update = fractal.change_param(7, shift, ctrl);
+            } else if (key_code == sf::Keyboard::Num9) {
+                update = fractal.change_param(8, shift, ctrl);
+            }
         }
     }
 
@@ -162,7 +168,6 @@ void Window::run() {
             #pragma omp section
             {
                 if (update) {
-                    update_info();
                     fractal.adjust_max_iters();
                     fractal.generate(int(width), int(height), pixels);
                     update = false;
@@ -173,6 +178,7 @@ void Window::run() {
         window.clear();
         window.draw(sprite);
         if (toggle_info) {
+            update_info();
             window.draw(info_background);
             window.draw(info);
         }

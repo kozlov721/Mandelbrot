@@ -1,5 +1,7 @@
 #include <cmath>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 
 #include "../include/FractalHandler.h"
 
@@ -32,14 +34,16 @@ void FractalHandler::save(const std::string &name) const {
             out.write(&pixel, 1);
         }
     }
+    #pragma acc exit data delete(pixels[0:WIDTH_8K * HEIGHT_8K * 4])
+    delete[] pixels;
 }
 
 void FractalHandler::change_iter_shift(int change) {
     max_iterations_shift += change;
 }
 
-void FractalHandler::change_param(int param_index, bool fast, bool reverse) const {
-    fractal->change_param(param_index, fast, reverse ? -1 : 1);
+bool FractalHandler::change_param(int param_index, bool fast, bool reverse) const {
+    return fractal->change_param(param_index, fast, reverse ? -1 : 1);
 }
 
 void FractalHandler::zoom(set_type amount) {
@@ -51,9 +55,11 @@ void FractalHandler::move(set_type d_r, set_type d_i) {
     imag_shift += d_i / zoom_value;
 }
 
-void FractalHandler::reset(bool reset_zoom, bool reset_iters) {
+void FractalHandler::reset(bool reset_zoom, bool reset_iters, bool reset_params) {
     zoom_value = reset_zoom ? INITIAL_ZOOM : zoom_value;
     max_iterations_shift = reset_iters ? INITIAL_ITER_SHIFT : max_iterations_shift;
+    if (reset_params)
+        fractal->reset_params();
 }
 
 set_type FractalHandler::get_zoom() const {
@@ -61,7 +67,10 @@ set_type FractalHandler::get_zoom() const {
 }
 
 std::string FractalHandler::generate_info_string() const {
-    return "Zoom: " + std::to_string(zoom_value) + "\n"
-         + "Iterations: " + std::to_string(max_iters) + "\n"
-         + fractal->get_params_info();
+    std::ostringstream stream;
+    stream << std::scientific << std::setprecision(2) <<
+        "Zoom: " << zoom_value << std::endl <<
+        "Iterations: " << max_iters << std::endl <<
+        fractal->get_params_info();
+    return stream.str();
 }

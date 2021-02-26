@@ -25,11 +25,11 @@ public:
     void adjust_max_iters();
     void save(const std::string &name) const;
     void change_iter_shift(int change);
-    void change_param(int param_index, bool fast, bool reverse) const;
+    bool change_param(int param_index, bool fast, bool reverse) const;
     std::string generate_info_string() const;
     void zoom(set_type amount);
     void move(set_type d_r, set_type d_i);
-    void reset(bool reset_zoom, bool reset_iters);
+    void reset(bool reset_zoom, bool reset_iters, bool reset_params);
 
     set_type get_zoom() const;
 };

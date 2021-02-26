@@ -15,5 +15,6 @@ public:
     virtual ~Fractal() = default;
     virtual std::string get_params_info() const = 0;
     virtual int get_num_params() const = 0;
-    virtual void change_param(int param_index, bool fast, int direction) = 0;
+    virtual bool change_param(int param_index, bool fast, int direction) = 0;
+    virtual void reset_params() = 0;
 };
