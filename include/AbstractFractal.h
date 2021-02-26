@@ -17,4 +17,5 @@ public:
     virtual int get_num_params() const = 0;
     virtual bool change_param(int param_index, bool fast, int direction) = 0;
     virtual void reset_params() = 0;
+    virtual float height_to_width_ratio() const = 0;
 };

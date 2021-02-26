@@ -6,7 +6,7 @@
 #include "FractalHandler.h"
 
 class Window {
-    FractalHandler fractal;
+    FractalHandler *fractal;
     sf::RenderWindow window;
     sf::Texture texture;
     sf::Sprite sprite;
@@ -28,7 +28,7 @@ class Window {
     void destroy_pixels();
 
 public:
-    Window(int width, int height, Fractal *fractal);
+    Window(int width, FractalHandler *fractal);
     ~Window();
     void run();
 };

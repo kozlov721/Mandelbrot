@@ -8,6 +8,7 @@ public:
     void generate(set_type zoom, int width, int height,
                   set_type real_axis_shift, set_type imag_axis_shift,
                   int max_iters, uint8_t *pixels) const override;
+    float height_to_width_ratio() const override;
 };
 
 
@@ -17,6 +18,7 @@ public:
     void generate(set_type zoom, int width, int height,
                   set_type real_axis_shift, set_type imag_axis_shift,
                   int max_iters, uint8_t *pixels) const override;
+    float height_to_width_ratio() const override;
 };
 
 
@@ -33,4 +35,5 @@ public:
     std::string get_params_info() const override;
     int get_num_params() const override;
     bool change_param(int param_index, bool fast, int direction) override;
+    float height_to_width_ratio() const override;
 };

@@ -9,7 +9,18 @@
 #define WIDTH_8K (3840 * 2)
 #define HEIGHT_8K (WIDTH_8K * 2 / 3)
 
-FractalHandler::FractalHandler(Fractal *fractal): fractal(fractal) {}
+FractalHandler::FractalHandler(Fractal *fractal, set_type initial_zoom,
+                               set_type initial_real_shift,
+                               set_type initial_imag_shift):
+                           fractal(fractal), initial_zoom(initial_zoom) {
+    zoom_value = initial_zoom;
+    real_shift = initial_real_shift;
+    imag_shift = initial_imag_shift;
+}
+
+FractalHandler::~FractalHandler() {
+    delete fractal;
+}
 
 void FractalHandler::generate(int width, int height, uint8_t *pixels) {
     fractal->generate(zoom_value, width, height,
@@ -56,7 +67,7 @@ void FractalHandler::move(set_type d_r, set_type d_i) {
 }
 
 void FractalHandler::reset(bool reset_zoom, bool reset_iters, bool reset_params) {
-    zoom_value = reset_zoom ? INITIAL_ZOOM : zoom_value;
+    zoom_value = reset_zoom ? initial_zoom : zoom_value;
     max_iterations_shift = reset_iters ? INITIAL_ITER_SHIFT : max_iterations_shift;
     if (reset_params)
         fractal->reset_params();
@@ -73,4 +84,12 @@ std::string FractalHandler::generate_info_string() const {
         "Iterations: " << max_iters << std::endl <<
         fractal->get_params_info();
     return stream.str();
+}
+
+int FractalHandler::get_info_height() const {
+    return fractal->get_num_params() + 2;
+}
+
+float FractalHandler::get_height_to_width_ratio() const {
+    return fractal->height_to_width_ratio();
 }

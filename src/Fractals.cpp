@@ -22,8 +22,8 @@ void CLASS::generate(set_type zoom, int width, int height,                      
         for (int i = 0; i < len; i += 4) {                                                         \
             int x = (i / 4) % width;                                                               \
             int y = (i / 4) / width;                                                               \
-            set_type c_r = (WIDTH_RATIO * x - width) / (width * zoom) - real_axis_shift;           \
-            set_type c_j = (HEIGHT_RATIO * y - height) / (height * zoom) - imag_axis_shift;        \
+            set_type c_r = ((WIDTH_RATIO) * x - width) / (width * zoom) - real_axis_shift;           \
+            set_type c_j = ((HEIGHT_RATIO) * y - height) / (height * zoom) - imag_axis_shift;        \
             int iters = (ITERATE_FUNCTION);                                                        \
             fill_with_color(&pixels[i], iters, params);                                            \
         }                                                                                          \
@@ -56,6 +56,10 @@ CREATE_GENERATE_METHOD(
         2
 )
 
+float MandelbrotSet::height_to_width_ratio() const {
+    return 2.f / 3.f;
+}
+
 /*************************************************************/
 
 inline int BurningShip::iterate(const set_type &c_r, const set_type &c_j, const int max_iters) {
@@ -84,6 +88,11 @@ CREATE_GENERATE_METHOD(
         2
 )
 
+
+float BurningShip::height_to_width_ratio() const {
+    return 2.f / 3.f;
+}
+
 /***********************************************************/
 
 inline int JuliaSet::iterate(set_type z_r, set_type z_j,
@@ -106,8 +115,8 @@ inline int JuliaSet::iterate(set_type z_r, set_type z_j,
 CREATE_GENERATE_METHOD(
         JuliaSet,
         iterate(c_r, c_j, params[4], params[5], max_iters),
-        1,
-        1
+        2,
+        2
 )
 
 JuliaSet::JuliaSet(set_type r, set_type j) {
@@ -117,7 +126,7 @@ JuliaSet::JuliaSet(set_type r, set_type j) {
 
 std::string JuliaSet::get_params_info() const {
     std::ostringstream stream;
-    stream << std::fixed << std::setprecision(3) <<
+    stream << EscapeTimeFractal::get_params_info() << std::fixed << std::setprecision(3) <<
         "C: " << params[4] << " + " << params[5] << "i" << std::endl;
     return stream.str();
 }
@@ -133,4 +142,8 @@ bool JuliaSet::change_param(int param_index, bool fast, int direction) {
     set_type speed = fast ? 5. : 1.;
     params[param_index] += direction * speed * 0.01;
     return true;
+}
+
+float JuliaSet::height_to_width_ratio() const {
+    return 1.f;
 }

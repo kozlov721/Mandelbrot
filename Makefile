@@ -3,7 +3,7 @@
 # Date: 22. 2. 2021
 
 CXX = pgc++
-CXXFLAGS = -std=c++20 -fast -O4 -acc -MMD
+CXXFLAGS = -std=c++20 -fast -O4 -acc -MMD -g
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -fopenmp -acc
 NAME = mandelbrot
 SRC_DIR = src

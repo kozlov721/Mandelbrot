@@ -2,8 +2,6 @@
 
 #define INITIAL_MAX_ITERS 30
 #define INITIAL_ITER_SHIFT 0
-#define INITIAL_REAL_SHIFT .0
-#define INITIAL_IMAG_SHIFT .0
 #define INITIAL_ZOOM 1.
 
 #include <string>
@@ -13,14 +11,18 @@
 class FractalHandler {
     int max_iterations_shift = INITIAL_ITER_SHIFT;
     int max_iters = INITIAL_MAX_ITERS;
-    set_type zoom_value = INITIAL_ZOOM;
-    set_type real_shift = INITIAL_REAL_SHIFT;
-    set_type imag_shift = INITIAL_IMAG_SHIFT;
+    const set_type initial_zoom;
+    set_type zoom_value;
+    set_type real_shift;
+    set_type imag_shift;
 
     Fractal *fractal;
 
 public:
-    FractalHandler(Fractal *fractal);
+    FractalHandler(Fractal *fractal, set_type initial_zoom,
+                   set_type initial_real_shift,
+                   set_type initial_imag_shift);
+    ~FractalHandler();
     void generate(int width, int height, uint8_t *pixels);
     void adjust_max_iters();
     void save(const std::string &name) const;
@@ -32,4 +34,6 @@ public:
     void reset(bool reset_zoom, bool reset_iters, bool reset_params);
 
     set_type get_zoom() const;
+    int get_info_height() const;
+    float get_height_to_width_ratio() const;
 };
