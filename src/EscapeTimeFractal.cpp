@@ -40,7 +40,7 @@ int EscapeTimeFractal::get_num_params() const {
 
 bool EscapeTimeFractal::change_param(int param_index, bool fast, int direction) {
     if (param_index > 3) return false;
-    set_type speed = fast ? 10. : 1.;
+    set_type speed = fast ? 5. : 1.;
     set_type change = param_index == 0 ? 0.5 : 0.05;
     params[param_index] += direction * speed * change;
     return true;

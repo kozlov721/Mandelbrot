@@ -32,7 +32,7 @@ int main(int args, const char **argv) {
             return INVALID_WIDTH;
         }
     }
-    std::string fractal_name = std::string(argv[2]);
+    std::string fractal_name = std::string(argv[2 - (width == DEFAULT_WIDTH)]);
     if (fractal_name == "mandelbrot") {
         FractalHandler handler = build_mandelbrot_set();
         Window window(width, &handler);

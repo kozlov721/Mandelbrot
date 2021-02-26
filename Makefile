@@ -5,7 +5,7 @@
 CXX = pgc++
 CXXFLAGS = -std=c++20 -fast -O4 -acc -MMD -g
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -fopenmp -acc
-NAME = mandelbrot
+NAME = FractalsExplorer
 SRC_DIR = src
 BUILD_DIR = build
 SRCS := $(shell find $(SRC_DIR) -name *.cpp)

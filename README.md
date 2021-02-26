@@ -1,13 +1,15 @@
 # Mandelbrot Set Visualiser 
 
 
-Simple app for zooming into the
-<a href="https://en.wikipedia.org/wiki/Mandelbrot_set">mandelbrot set</a>.<br>
-Here are some examples:
+Simple app for zooming into
+<a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set</a>,
+<a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Julia Set</a>,
+and <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">The Burning Ship</a> fractals.<br>
+Here are some examples of Mandelbrot Set:
 
 
-**Zoomed twice** <br>
-<img src="example_images_low_res/twice.png" alt="Zoomed twice" width="600"/><br>
+**No zoom** <br>
+<img src="example_images_low_res/twice.png" alt="No zoom" width="600"/><br>
 
 
 **Zoomed a hundred times** <br>
@@ -24,10 +26,10 @@ Here are some examples:
 
 <br>
 
-The set is colored using this formula:
+All fractals are colored by this formula:
 
 
-<img src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} \cdot (1 - \cos(R \cdot n), 1 - \cos(G \cdot n), 1 - \cos(B \cdot n))">
+<img alt="formula" src="https://render.githubusercontent.com/render/math?math=(r, g, b) = \frac{255}{2K} \cdot (1 - \cos(R \cdot n), 1 - \cos(G \cdot n), 1 - \cos(B \cdot n))">
 
 [comment]: <> (```math)
 [comment]: <> (&#40;r, g, b&#41; = \frac{255}{2K} * &#40;1 - cos&#40;R * n&#41;, 1 - cos&#40;G * n&#41;, 1 - cos&#40;B * n&#41;&#41;)
@@ -36,10 +38,10 @@ where n is the number of computed iterations before the point exceeded from the 
 initialized as:
 
 
-<img src="https://render.githubusercontent.com/render/math?math=K = 10"><br>
-<img src="https://render.githubusercontent.com/render/math?math=R = 1"><br>
-<img src="https://render.githubusercontent.com/render/math?math=G = \frac{1}{3\sqrt{2}}"><br>
-<img src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1 / 8}}"><br>
+<img alt="K" src="https://render.githubusercontent.com/render/math?math=K = 10"><br>
+<img alt="R" src="https://render.githubusercontent.com/render/math?math=R = 1"><br>
+<img alt="G" src="https://render.githubusercontent.com/render/math?math=G = \frac{1}{3\sqrt{2}}"><br>
+<img alt="B" src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1 / 8}}"><br>
 
 For the formula I was inspired
 by <a href="https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set">this article</a>.
@@ -101,13 +103,13 @@ by <a href="https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mand
     </tr>
     <tr>
         <td>b</td>
-        <td>zoom_value back to initial state</td>
-        <td>It keeps the position, just resets the zoom_value,
-            so you can zoom_value in again to where you were.</td>
+        <td>zooms back to initial state</td>
+        <td>It keeps the position and number of maximum iterations, just resets the zoom,
+            so you can zoom in again to where you were before as long as you won't move.</td>
     </tr>
     <tr>
         <td>r</td>
-        <td>zoom_value back and reset all parameters</td>
+        <td>zooms back and reset the number of iterations</td>
         <td>
             Zooms back to the original state
             and also keeps the position. In addition,
@@ -120,28 +122,40 @@ by <a href="https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mand
         <td>Resets K, R, G and B constants to theirs default values.</td>
     </tr>
     <tr>
-        <td>u</td>
-        <td>K = K + 1</td>
-        <td>Press shift for decrease.
-            Press ctrl for slower change</td>
+        <td>1</td>
+        <td>K = K + 0.5</td>
+        <td>Press shift for faster change.
+            Press ctrl for decrease</td>
     </tr>
     <tr>
-        <td>i</td>
-        <td>R = R + 0.1</td>
-        <td>Press shift for decrease.
-            Press ctrl for slower change</td>
+        <td>2</td>
+        <td>R = R + 0.05</td>
+        <td>Press shift for faster change.
+            Press ctrl for decrease</td>
     </tr>
     <tr>
-        <td>o</td>
-        <td>R = R + 0.1</td>
-        <td>Press shift for decrease.
-            Press ctrl for slower change</td>
+        <td>3</td>
+        <td>G = G + 0.05</td>
+        <td>Press shift for faster change.
+            Press ctrl for decrease</td>
     </tr>
     <tr>
-        <td>p</td>
-        <td>R = R + 0.1</td>
-        <td>Press shift for decrease.
-            Press ctrl for slower change</td>
+        <td>4</td>
+        <td>B = B + 0.05</td>
+        <td>Press shift for faster change.
+            Press ctrl for decrease</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>increases real part of c constant when viewing the Julia Set</td>
+        <td>Press shift for faster change.
+            Press ctrl for decrease.</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>increases imaginary part of c constant when viewing the Julia Set</td>
+        <td>Press shift for faster change.
+            Press ctrl for decrease</td>
     </tr>
     <tr>
         <td>t</td>
@@ -160,22 +174,18 @@ You can also move around using mouse.
 
 
 ## Building the app (for Linux)
-There are two options as for how to build this app. You can compile the source code
-for GPU or for CPU. The performance of the GPU version is very good, but it only allows me to
-use less precise numerical types, so the maximum zoom is lower. <br>
-The performance of CPU version is much worse (though still manageable), but it allows larger zoom.
-
-To build the app, simply use the provided makefile and type `make` or `make ACC=gpu`. <br>
-For compiling with ``ACC=gpu``, one must have installed ``nvc++`` compiler, for both version
-there must be <a href="https://www.sfml-dev.org/">SFML library</a> available on the system.
-
+To build the app, simply use the provided makefile and type `make`. <br>
+The command will create build directory with the FractalsExplorer in it. <br>
+For the compilation to work, one must have installed ``pgc++`` compiler.
+Installation instructions are <a href="https://developer.nvidia.com/nvidia-hpc-sdk-downloads">here</a>.
+<br>
+There also must be <a href="https://www.sfml-dev.org/">SFML library</a> available on the system.
+It should be possible to get it easily from your system's repositories.
 
 ## Running the app
-The compiled app can be run as is, then the size of the window will be 1200x800.
-You can also pass different size as command line arguments in the form of
+To run the app, you have to specify which of the fractals you want to explore via command line arguments.
+You can also specify the width of the window. The height will be computed automatically to fit the 
+ratio of chosen fractal. <br>
 ``
-$ ./mandelbrot WIDTH HEIGHT
+$ ./FractalsExplorer WIDTH [mandelbrot|julia|ship]
 ``
-but be aware of keeping the correct ratio 3:2.
-If you don't want to care about the ratio, you can omit the HEIGHT parameter,
-it will be automatically computed from WIDTH.
