@@ -3,7 +3,7 @@
 # Date: 22. 2. 2021
 
 CXX = pgc++
-CXXFLAGS = -std=c++20 -fast -O4 -acc -MMD -g
+CXXFLAGS = -std=c++20 -g -fast -O4 -acc
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -fopenmp -acc
 NAME = FractalsExplorer
 SRC_DIR = src
@@ -15,7 +15,7 @@ DEPS := $(OBJS:.o=.d)
 all: $(BUILD_DIR)/$(NAME)
 
 dep:
-	$(CXX) -MM src/*.cpp > dep.list
+	$(CXX) -MM src/*.cpp > $(BUILD_DIR)/dep.list
 
 
 $(BUILD_DIR)/$(NAME): $(OBJS)
@@ -32,4 +32,4 @@ clean:
 run: $(BUILD_DIR)/$(NAME)
 	./$(BUILD_DIR)/$(NAME)
 
--include $(DEPS)
+-include $(BUILD_DIR)/dep.list

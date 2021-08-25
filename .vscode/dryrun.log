@@ -1,0 +1,18 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/martin/Dropbox/C++Projects/MandelbrotZoom'
+ 
+mkdir -p build/src/
+pgc++ -std=c++20 -fast -O4 -acc -g -c src/FractalBuilder.cpp -o build/src/FractalBuilder.cpp.o
+mkdir -p build/src/
+pgc++ -std=c++20 -fast -O4 -acc -g -c src/Main.cpp -o build/src/Main.cpp.o
+mkdir -p build/src/
+pgc++ -std=c++20 -fast -O4 -acc -g -c src/EscapeTimeFractal.cpp -o build/src/EscapeTimeFractal.cpp.o
+mkdir -p build/src/
+pgc++ -std=c++20 -fast -O4 -acc -g -c src/FractalHandler.cpp -o build/src/FractalHandler.cpp.o
+mkdir -p build/src/
+pgc++ -std=c++20 -fast -O4 -acc -g -c src/Fractals.cpp -o build/src/Fractals.cpp.o
+mkdir -p build/src/
+pgc++ -std=c++20 -fast -O4 -acc -g -c src/Window.cpp -o build/src/Window.cpp.o
+pgc++ build/src/FractalBuilder.cpp.o build/src/Main.cpp.o build/src/EscapeTimeFractal.cpp.o build/src/FractalHandler.cpp.o build/src/Fractals.cpp.o build/src/Window.cpp.o -o build/FractalsExplorer -lsfml-graphics -lsfml-window -lsfml-system -fopenmp -acc
+make: Leaving directory '/home/martin/Dropbox/C++Projects/MandelbrotZoom'
+ 

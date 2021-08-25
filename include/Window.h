@@ -3,10 +3,10 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-#include "FractalHandler.h"
+#include "Mandelbrot.h"
 
 class Window {
-    FractalHandler *fractal;
+    Mandelbrot fractal = Mandelbrot();
     sf::RenderWindow window;
     sf::Texture texture;
     sf::Sprite sprite;
@@ -28,7 +28,7 @@ class Window {
     void destroy_pixels();
 
 public:
-    Window(int width, FractalHandler *fractal);
+    Window(int width, int height);
     ~Window();
     void run();
 };
