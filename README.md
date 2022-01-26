@@ -6,27 +6,28 @@ Simple app for zooming into [Mandelbrot Set](https://en.wikipedia.org/wiki/Mande
 Here are some screenshots:
 
 No zoom
-![No zoom](example_images_low_res/twice.png)
+![No zoom](example_images/twice.png)
+
 
 **Zoomed a hundred times**
-![Zoomed a hundred times](example_images_low_res/hundred.png)
+![Zoomed a hundred times](example_images/hundred.png)
 
 
 **Zoomed a million times**
-![Zoomed a million times](example_images_low_res/million.png)
+![Zoomed a million times](example_images/million.png)
 
 
 **Zoomed a trillion times**
-![Zoomed a trillion times](example_images_low_res/trillion.png)
+![Zoomed a trillion times](example_images/trillion.png)
 
 
-All fractals are colored using this formula:
+The fractal is colored using this formula:
 
 
 <img alt="formula" src="https://render.githubusercontent.com/render/math?math=\color{red}(r, g, b) = \frac{255}{2K} \cdot (1 - \cos(R \cdot n), 1 - \cos(G \cdot n), 1 - \cos(B \cdot n))">
 
-where n is the number of computed iterations before the point exceeded from the set and K, R, G, B are chosen parameters,
-initialized as:
+where n is the number of computed iterations before the point exceeded
+from the set and K, R, G, B are parameters, initialized as:
 
 
 <img alt="K" src="https://render.githubusercontent.com/render/math?math=\color{red}K = 10"><br>
@@ -130,18 +131,6 @@ by [this article](https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.ph
         Press ctrl for decrease</td>
   </tr>
   <tr>
-    <td>5</td>
-    <td>increases real part of c constant when viewing the Julia Set</td>
-    <td>Press shift for faster change.
-        Press ctrl for decrease.</td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td>increases imaginary part of c constant when viewing the Julia Set</td>
-    <td>Press shift for faster change.
-        Press ctrl for decrease</td>
-  </tr>
-  <tr>
     <td>t</td>
     <td>toggle info</td>
     <td></td>
@@ -161,7 +150,7 @@ You can also move around using mouse.
 To build the app, simply use the provided makefile and run `make`.
 The command will create build directory with the Mandelbrot
 executable in it.
-For the compilation to work, one must have installed ``pgc++`` compiler.
+For the compilation to work, one must have installed `pgc++` compiler.
 Installation instructions are [here](https://developer.nvidia.com/nvidia-hpc-sdk-downloads).
 
 
@@ -172,9 +161,9 @@ It should be possible to get it easily from your system's repositories.
 ## Usage
 
 The default width is set to 1200 px, which is enough to look good,
-but not too much to run too slow. You can change the width using command line argument.
+but not too much to run too slow. You can change the width using a command line argument.
 The height is computed automatically as two thirds of the width to maintain the correct ratio.
 
-``
+```
 Mandelbrot [<width>]
-``
+```
