@@ -1,83 +1,47 @@
 #include <cmath>
-#include <fstream>
-#include <sstream>
 #include <iomanip>
 
 #include "../include/Mandelbrot.h"
 
 #define ITER_SPEED 20
-#define WIDTH_8K (3840 * 2)
-#define HEIGHT_8K (WIDTH_8K * 2 / 3)
 
 
 void Mandelbrot::generate(int width, int height, uint8_t *pixels) const {
     int len = width * height * 4;
-    _Pragma("acc data present(pixels[0:len])")
+    #pragma acc data present(pixels[0:len])
     {
-        _Pragma("acc parallel loop")
+        #pragma acc parallel loop
         for (int i = 0; i < len; i += 4) {
             int x = (i / 4) % width;
             int y = (i / 4) / width;
             double c_r = (3 * x - width) / (width * zoom_value) - real_shift;
             double c_j = (2 * y - height) / (height * zoom_value) - imag_shift;
-            
+
             double z_r = 0.;
             double z_j = 0.;
             double new_r;
             int iters;
-            for (iters = 0; iters < max_iters; ++iters) {
+            for (iters = 0; iters < max_iters && z_r * z_r + z_j * z_j < 4.; ++iters) {
                 new_r = z_r * z_r - z_j * z_j;
                 z_j = 2 * z_r * z_j;
                 z_r = new_r;
                 z_r += c_r;
                 z_j += c_j;
-                if (z_r * z_r + z_j * z_j >= 4.)
-                    break;
             }
-            
+
             pixels[i] = short(255 * ((1 - std::cos(r * float(iters) / k)) / 2));
             pixels[i + 1] = short(255 * ((1 - std::cos(g * float(iters) / k)) / 2));
             pixels[i + 2] = short(255 * ((1 - std::cos(b * float(iters) / k)) / 2));
 
         }
 
-        // _Pragma("acc parallel loop")
-        // for (int i = 4; i < len - 1; i += 8) {
-        //     for (int j = 0; j < 3; ++j) {
-        //         pixels[i + j] = (pixels[i + j - 4] + pixels[i + j + 4]) / 2;
-        //     }
-            
-            
-        //     // pixels[i] = short(255 * ((1 - std::cos(r * float(iters) / k)) / 2));
-        //     // pixels[i + 1] = short(255 * ((1 - std::cos(g * float(iters) / k)) / 2));
-        //     // pixels[i + 2] = short(255 * ((1 - std::cos(b * float(iters) / k)) / 2));
-
-        // }
-
-    _Pragma("acc update self(pixels[0:len])")
+    #pragma acc update self(pixels[0:len])
     }
 }
 
 void Mandelbrot::adjust_max_iters() {
     max_iters = std::max(INITIAL_MAX_ITERS,
                          int(std::log(zoom_value) * ITER_SPEED) + max_iterations_shift);
-}
-
-void Mandelbrot::save(const std::string &name) const {
-    // auto *pixels = new uint8_t[WIDTH_8K * HEIGHT_8K * 4];
-    // #pragma acc enter data create(pixels[0:WIDTH_8K * HEIGHT_8K * 4])
-    // generate(zoom_value, WIDTH_8K, HEIGHT_8K,
-    //          real_shift, imag_shift, max_iters, pixels);
-    // std::ofstream out(name, std::ios::binary | std::ios::out | std::ios::trunc);
-    // out << "P6\n" << WIDTH_8K << " " << HEIGHT_8K << "\n255\n";
-    // for (int i = 0; i < WIDTH_8K * HEIGHT_8K * 4; i += 4) {
-    //     for (int j = 0; j < 3; ++j) {
-    //         const char pixel = pixels[i + j];
-    //         out.write(&pixel, 1);
-    //     }
-    // }
-    // #pragma acc exit data delete(pixels[0:WIDTH_8K * HEIGHT_8K * 4])
-    // delete[] pixels;
 }
 
 void Mandelbrot::change_iter_shift(int change) {
@@ -99,7 +63,7 @@ bool Mandelbrot::change_param(int param_index, bool shift, bool ctrl) {
     else if (param_index == 3)
         b += speed * reverse * 0.1;
     return true;
-    
+
 }
 
 void Mandelbrot::zoom(double amount) {
@@ -122,8 +86,10 @@ void Mandelbrot::reset(bool reset_zoom, bool reset_iters, bool reset_params) {
     }
 }
 
-double Mandelbrot::get_zoom() const {
-    return zoom_value;
+std::string Mandelbrot::format_info() const {
+    return std::to_string(zoom_value) + "_"
+        + std::to_string(real_shift) + "+"
+        + std::to_string(imag_shift) + "j";
 }
 
 std::string Mandelbrot::generate_info_string() const {

@@ -1,8 +1,12 @@
 #include <cassert>
+#include <fstream>
 #include "../include/Window.h"
 
 #define MOVE_STEP 0.08
 #define CHANNELS 4
+
+#define WIDTH_8K (3840 * 2)
+#define HEIGHT_8K (WIDTH_8K * 2 / 3)
 
 
 Window::Window(int width, int height):
@@ -11,7 +15,7 @@ Window::Window(int width, int height):
         window(sf::VideoMode(width, height),
                "MandelbrotSet",
                sf::Style::Titlebar | sf::Style::Close) {
-    
+
     info_background.setSize(sf::Vector2f(
             float(width) / 40.f * 6,
             float(height) / 40.f * 8.5));
@@ -64,7 +68,9 @@ void Window::handle_events() {
                 toggle_info = !toggle_info;
                 update = true;
             } else if (key_code == sf::Keyboard::Enter) {
-                fractal.save("mandelbrot" + std::to_string(fractal.get_zoom()) + ".ppm");
+                capture("mandelbrot"
+                        + fractal.format_info()
+                        + ".ppm");
             } else if (key_code == sf::Keyboard::Num1) {
                 update = fractal.change_param(0, shift, ctrl);
             } else if (key_code == sf::Keyboard::Num2) {
@@ -95,7 +101,6 @@ void Window::handle_events() {
         update = true;
     }
     if (window.hasFocus()) {
-//        sf::sleep(sf::milliseconds(40));
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)
                 || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             fractal.move(0, MOVE_STEP);
@@ -147,6 +152,22 @@ void Window::create_pixels() {
 void Window::destroy_pixels() {
     #pragma acc exit data delete(pixels[0:len])
     delete[] pixels;
+}
+
+void Window::capture(const std::string &name) const {
+    auto *capturePixels = new uint8_t[WIDTH_8K * HEIGHT_8K * 4];
+    #pragma acc enter data create(capturePixels[0:WIDTH_8K * HEIGHT_8K * 4])
+    fractal.generate(WIDTH_8K, HEIGHT_8K, capturePixels);
+    std::ofstream out(name, std::ios::binary | std::ios::out | std::ios::trunc);
+    out << "P6\n" << WIDTH_8K << " " << HEIGHT_8K << "\n255\n";
+    for (int i = 0; i < WIDTH_8K * HEIGHT_8K * 4; i += 4) {
+        for (int j = 0; j < 3; ++j) {
+            const char pixel = capturePixels[i + j];
+            out.write(&pixel, 1);
+        }
+    }
+    #pragma acc exit data delete(capturePixels[0:WIDTH_8K * HEIGHT_8K * 4])
+    delete[] capturePixels;
 }
 
 void Window::run() {

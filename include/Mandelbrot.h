@@ -24,11 +24,9 @@ class Mandelbrot {
     double g = INITIAL_G;
     double b = INITIAL_B;
 
-
 public:
     void generate(int width, int height, uint8_t *pixels) const;
     void adjust_max_iters();
-    void save(const std::string &name) const;
     void change_iter_shift(int change);
     bool change_param(int param_index, bool fast, bool reverse);
     std::string generate_info_string() const;
@@ -36,5 +34,5 @@ public:
     void move(double d_r, double d_i);
     void reset(bool reset_zoom, bool reset_iters, bool reset_params);
 
-    double get_zoom() const;
+    std::string format_info() const;
 };

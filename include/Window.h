@@ -26,6 +26,7 @@ class Window {
     void update_info();
     void create_pixels();
     void destroy_pixels();
+    void capture(const std::string &name) const;
 
 public:
     Window(int width, int height);

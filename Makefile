@@ -1,11 +1,11 @@
-# Project: Fractal Explorer
+# Project: Mandelbrot
 # Author: Martin Kozlovsky
 # Date: 22. 2. 2021
 
 CXX = pgc++
 CXXFLAGS = -std=c++20 -g -fast -O4 -acc
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -fopenmp -acc
-NAME = FractalsExplorer
+NAME = Mandelbrot
 SRC_DIR = src
 BUILD_DIR = build
 SRCS := $(shell find $(SRC_DIR) -name *.cpp)
