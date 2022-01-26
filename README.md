@@ -167,10 +167,11 @@ Installation instructions are [here](https://developer.nvidia.com/nvidia-hpc-sdk
 To build the app, you alse need [SFML library](https://www.sfml-dev.org/).
 It should be possible to get it easily from your system's repositories.
 
-## Running the app
-To run the app, you have to specify which of the fractals you want to explore via command line arguments.
-You can also specify the width of the window. The height will be computed automatically to fit the
-ratio of chosen fractal.
+
+The executable will be created in `build` folder. The default width is 1200 px, which
+is enough to look good but not too much to run slow.
+You can change the width using command line argument.
+The height is computed automatically to maintain the correct ratio.
 ``
-$ ./FractalsExplorer WIDTH [mandelbrot|julia|ship]
+$ ./build/Mandelbrot WIDTH
 ``
