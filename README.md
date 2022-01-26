@@ -13,18 +13,17 @@ No zoom
 
 
 **Zoomed a million times**
-~[Zoomed a million times](example_images_low_res/million.png)
+![Zoomed a million times](example_images_low_res/million.png)
 
 
 **Zoomed a trillion times**
 ![Zoomed a trillion times](example_images_low_res/trillion.png)
 
 
-
 All fractals are colored using this formula:
 
 
-<img alt="formula" src="https://render.githubusercontent.com/render/math?math=\color{(r, g, b) = \frac{255}{2K} \cdot (1 - \cos(R \cdot n), 1 - \cos(G \cdot n), 1 - \cos(B \cdot n))}">
+<img alt="formula" src="https://render.githubusercontent.com/render/math?math=\color{red}(r, g, b) = \frac{255}{2K} \cdot (1 - \cos(R \cdot n), 1 - \cos(G \cdot n), 1 - \cos(B \cdot n))">
 
 where n is the number of computed iterations before the point exceeded from the set and K, R, G, B are chosen parameters,
 initialized as:
