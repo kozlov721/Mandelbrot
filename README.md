@@ -158,8 +158,9 @@ You can also move around using mouse.
 
 
 ## Building the app (for Linux)
-To build the app, simply use the provided makefile and type `make`.
-The command will create build directory with the FractalsExplorer in it.
+To build the app, simply use the provided makefile and run `make`.
+The command will create build directory with the Mandelbrot
+executable in it.
 For the compilation to work, one must have installed ``pgc++`` compiler.
 Installation instructions are [here](https://developer.nvidia.com/nvidia-hpc-sdk-downloads).
 
@@ -168,10 +169,12 @@ To build the app, you alse need [SFML library](https://www.sfml-dev.org/).
 It should be possible to get it easily from your system's repositories.
 
 
-The executable will be created in `build` folder. The default width is 1200 px, which
-is enough to look good but not too much to run slow.
-You can change the width using command line argument.
-The height is computed automatically to maintain the correct ratio.
+## Usage
+
+The default width is set to 1200 px, which is enough to look good,
+but not too much to run too slow. You can change the width using command line argument.
+The height is computed automatically as two thirds of the width to maintain the correct ratio.
+
 ``
-$ ./build/Mandelbrot WIDTH
+Mandelbrot [<width>]
 ``
