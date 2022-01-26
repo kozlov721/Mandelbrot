@@ -29,10 +29,10 @@ where n is the number of computed iterations before the point exceeded from the 
 initialized as:
 
 
-<img alt="K" src="https://render.githubusercontent.com/render/math?math=K = 10"><br>
-<img alt="R" src="https://render.githubusercontent.com/render/math?math=R = 1"><br>
-<img alt="G" src="https://render.githubusercontent.com/render/math?math=G = \frac{1}{3\sqrt{2}}"><br>
-<img alt="B" src="https://render.githubusercontent.com/render/math?math=B = \frac{1}{7 \cdot 3^{1 / 8}}"><br>
+<img alt="K" src="https://render.githubusercontent.com/render/math?math=\color{red}K = 10"><br>
+<img alt="R" src="https://render.githubusercontent.com/render/math?math=\color{red}R = 1"><br>
+<img alt="G" src="https://render.githubusercontent.com/render/math?math=\color{red}G = \frac{1}{3\sqrt{2}}"><br>
+<img alt="B" src="https://render.githubusercontent.com/render/math?math=\color{red}B = \frac{1}{7 \cdot 3^{1 / 8}}"><br>
 
 For the formula I was inspired
 by [this article](https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set).
