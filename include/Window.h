@@ -15,17 +15,16 @@ class Window {
     sf::Text info;
     sf::RectangleShape info_background;
     sf::Uint8 *pixels = nullptr;
+    std::string info_string;
     int width;
     int height;
     int len;
     bool update = true;
     bool toggle_info = true;
-    std::string info_string;
 
     void handle_events();
     void update_info();
     void create_pixels();
-    void destroy_pixels();
     void capture(const std::string &name) const;
 
 public:

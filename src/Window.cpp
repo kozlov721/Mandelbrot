@@ -33,7 +33,8 @@ Window::Window(int width, int height):
 
 
 Window::~Window() {
-    destroy_pixels();
+    #pragma acc exit data delete(pixels[0:len])
+    delete[] pixels;
 }
 
 void Window::handle_events() {
@@ -147,11 +148,6 @@ void Window::create_pixels() {
     for (int i = 0; i < width * height * 4; i += 4)
         pixels[i + 3] = 255;
     #pragma acc update device(pixels[0:len])
-}
-
-void Window::destroy_pixels() {
-    #pragma acc exit data delete(pixels[0:len])
-    delete[] pixels;
 }
 
 void Window::capture(const std::string &name) const {

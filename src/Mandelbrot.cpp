@@ -34,7 +34,6 @@ void Mandelbrot::generate(int width, int height, uint8_t *pixels) const {
             pixels[i + 2] = short(255 * ((1 - std::cos(b * float(iters) / k)) / 2));
 
         }
-
     #pragma acc update self(pixels[0:len])
     }
 }
