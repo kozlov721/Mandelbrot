@@ -24,16 +24,16 @@ No zoom
 The fractal is colored using this formula:
 
 
-<img alt="formula" src="https://render.githubusercontent.com/render/math?math=\color{lightgrey}(r, g, b) = \frac{255}{2K} \cdot (1 - \cos(R \cdot n), 1 - \cos(G \cdot n), 1 - \cos(B \cdot n))">
+<img alt="formula" src="https://render.githubusercontent.com/render/math?math=\color{grey}(r, g, b) = \frac{255}{2K} \cdot (1 - \cos(R \cdot n), 1 - \cos(G \cdot n), 1 - \cos(B \cdot n))">
 
 where n is the number of computed iterations before the point exceeded
 from the set and K, R, G, B are parameters, initialized as:
 
 
-<img alt="K" src="https://render.githubusercontent.com/render/math?math=\color{lightgrey}K = 10"><br>
-<img alt="R" src="https://render.githubusercontent.com/render/math?math=\color{lightgrey}R = 1"><br>
-<img alt="G" src="https://render.githubusercontent.com/render/math?math=\color{lightgrey}G = \frac{1}{3\sqrt{2}}"><br>
-<img alt="B" src="https://render.githubusercontent.com/render/math?math=\color{lightgrey}B = \frac{1}{7 \cdot 3^{1 / 8}}"><br>
+<img alt="K" src="https://render.githubusercontent.com/render/math?math=\color{grey}K = 10"><br>
+<img alt="R" src="https://render.githubusercontent.com/render/math?math=\color{grey}R = 1"><br>
+<img alt="G" src="https://render.githubusercontent.com/render/math?math=\color{grey}G = \frac{1}{3\sqrt{2}}"><br>
+<img alt="B" src="https://render.githubusercontent.com/render/math?math=\color{grey}B = \frac{1}{7 \cdot 3^{1 / 8}}"><br>
 
 For the formula I was inspired
 by [this article](https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set).
