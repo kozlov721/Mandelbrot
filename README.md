@@ -1,4 +1,4 @@
-# Fractals Zooming Visualizer
+# Mandelbrot Set Visualizer
 
 
 Simple app for zooming into [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set).
