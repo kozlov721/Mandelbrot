@@ -10,6 +10,7 @@
 #define INITIAL_B 0.58490406881
 
 #include <string>
+#include <stdint.h>
 
 
 class Mandelbrot {
